@@ -1,0 +1,3 @@
+StartTimer() returns start time -> usage: startTime = StartTimer
+EndTimer() takes one argument startTime and returns elapsedTime
+timestamps is an array with timestamps that automaticly get added when EndTimer is triggered
