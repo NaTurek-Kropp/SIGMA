@@ -1,7 +1,8 @@
 import pygame
 import requests
+import Data
 from io import BytesIO
-from typing import Literal
+from typing import Literal, Callable
 
 class Rect():
     def __init__(self, *, color="white", sizeScale=(0,0), sizeOffset=(0,0), positionScale=(0,0), positionOffset=(0,0), align: Literal["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"]="topleft", anchor: Literal["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"]="topleft"):
@@ -60,8 +61,8 @@ class Image():
     def tick(self):
         self.surface.blit(self.image, self.position)
 
-class Button():
-    def __init__(self, *, color="white", text: Text, command: function, sizeScale=(0,0), sizeOffset=(0,0), positionScale=(0,0), positionOffset=(0,0), align: Literal["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"]="topleft", anchor: Literal["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"]="topleft"):
+class Button(): #nonexistend function -> Callable !
+    def __init__(self, *, color="white", text: Text, command: Callable, sizeScale=(0,0), sizeOffset=(0,0), positionScale=(0,0), positionOffset=(0,0), align: Literal["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"]="topleft", anchor: Literal["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"]="topleft"):
         self.surface = pygame.display.get_surface()
         self.color = color
         self.align = align

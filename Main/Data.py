@@ -1,4 +1,4 @@
-def GetData(file_path):
+def GetQuestionsData(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
         lines = file.readlines()
     
@@ -11,9 +11,15 @@ def GetData(file_path):
     return questions
 
 file_path = 'Data/pytania.txt'
-questions = GetData(file_path)
+questions = GetQuestionsData(file_path)
 
 for question, answersWithImages in questions:
-    # print(question)
     for answer in answersWithImages:
         print((answer))
+
+class Answers:
+    def __init__(self):
+        self.answersTable = []
+
+    def AppendAnswer(self, answer):
+        self.answersTable.append(answer)

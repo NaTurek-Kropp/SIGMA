@@ -1,5 +1,6 @@
 import pygame
 import elements
+import Data
 
 surfaceElements = []
 
@@ -27,14 +28,19 @@ def main():
 
     pygame.quit()
 
+def answer(answer):
+    Data.Answers.appendAnswer(answer)
+
 def createQuizElements():
     clearSurfaceElements()
 
-    quizFrame = elements.Rect(color="blue", sizeScale=(.9, .2), positionScale=(0, 0.05), align="top", anchor="top")
-    surfaceElements.append(quizFrame)
+    #quizFrame = elements.Rect(color="blue", sizeScale=(.9, .2), positionScale=(0, 0.05), align="top", anchor="top")
+    #surfaceElements.append(quizFrame)
 
-    image = elements.Image("https://www.pygame.org/docs/_static/pygame_tiny.png", "height", sizeScale=(0, 0.3), positionScale=(0, 0.3), align="top", anchor="top")
-    surfaceElements.append(image)
+    button = elements.Button(color="red", text="A", command=lambda: answer("A"), sizeScale=(.9, .2), positionScale=(0, 0.05), align="top", anchor="top")
+    surfaceElements.append(button)
+    #image = elements.Image("https://www.pygame.org/docs/_static/pygame_tiny.png", "height", sizeScale=(0, 0.3), positionScale=(0, 0.3), align="top", anchor="top")
+    #surfaceElements.append(image)
 
 def clearSurfaceElements():
     surfaceElements.clear()
