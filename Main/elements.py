@@ -1,6 +1,5 @@
 import pygame
 import requests
-import Data
 from io import BytesIO
 from typing import Literal, Callable
 
@@ -21,8 +20,13 @@ class Rect():
 
 class Text():
     def __init__(self, text: str, font, fontSize: int=10, fontColor="black", backgroundColor=None):
-        self.font = pygame.font.Font(font, fontSize)
-        self.text = self.font.render(text, True, fontColor, backgroundColor)
+        self.font = pygame.font.SysFont(font, fontSize)
+        self.text = text
+        self.fontColor = fontColor
+        self.backgroundColor = backgroundColor
+
+    def render(self):
+        return self.font.render(self.text, True, self.fontColor, self.backgroundColor)
 
 class Image():
     def __init__(self, *, url, factor: Literal["height", "width", None], sizeScale=(0,0), sizeOffset=(0,0), positionScale=(0,0), positionOffset=(0,0), align: Literal["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"]="topleft", anchor: Literal["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"]="topleft"):
@@ -61,21 +65,33 @@ class Image():
     def tick(self):
         self.surface.blit(self.image, self.position)
 
-class Button(): #nonexistend function -> Callable !
+class Button():
     def __init__(self, *, color="white", text: Text, command: Callable, sizeScale=(0,0), sizeOffset=(0,0), positionScale=(0,0), positionOffset=(0,0), align: Literal["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"]="topleft", anchor: Literal["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"]="topleft"):
         self.surface = pygame.display.get_surface()
         self.color = color
         self.align = align
         self.anchor = anchor
         self.text = text
+        self.textrender = text.render()
         self.command = command
 
         surfaceSize = self.surface.get_size()
         self.size = getSize(surfaceSize, sizeScale, sizeOffset)
         self.position = getPosition(surfaceSize, positionScale, positionOffset, self.size, self.align, self.anchor)
 
+        self.textRect = self.textrender.get_rect()
+        self.textRect.center = getCenter(self.size, self.position)
+
+    def getRect(self):
+        return pygame.Rect(self.position, self.size)
+
     def tick(self):
-        pygame.draw.rect(self.surface, self.color, self.position + self.size)
+        # pygame.draw.rect(self.surface, self.color, self.position + self.size)
+        
+        self.surface.blit(self.textrender, self.textRect)
+
+    def pressed(self):
+        self.command()
 
 def getSize(surfaceSize, sizeScale, sizeOffset):
     return (surfaceSize[0]*(sizeScale[0]+sizeOffset[0]), surfaceSize[1]*(sizeScale[1]+sizeOffset[1]))
@@ -83,8 +99,10 @@ def getSize(surfaceSize, sizeScale, sizeOffset):
 def getPosition(surfaceSize, positionScale, positionOffset, size, align, anchor):
     align = getAlignAnchor(surfaceSize, align)
     anchor = getAlignAnchor(size, anchor)
-    print(anchor)
     return (align[0]-anchor[0]+surfaceSize[0]*positionScale[0]+positionOffset[0], align[1]-anchor[1]+surfaceSize[1]*positionScale[1]+positionOffset[1])
+
+def getCenter(size, position):
+    return (position[0]+size[0]/2, position[1]+size[1]/2)
 
 def getAlignAnchor(surfaceSize, alignAnchor: Literal["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"]):
     match alignAnchor:
