@@ -1,14 +1,14 @@
 import Elements
 import pygame
 
-def getQuizElements(answerCommand, question, answers):
+def getQuizElements(answerCommand, nextQuestionCommand, prevQuestionCommand, question, answers):
     ansLetters = ["A", "B", "C", "D"]
     surfaceElements = []
 
     questionTextBox = Elements.TextBox(text=Elements.Text(text=question[0], fontSize=80, fontColor="white"), backgroundColor="blue", sizeScale=(.9, .2), positionScale=(0, 0.05), align="top", anchor="top")
     surfaceElements.append(questionTextBox)
 
-    image = Elements.Image(url=question[1], factor="height", sizeScale=(0, 0.3), positionScale=(0, 0.3), align="top", anchor="top")
+    image = Elements.Image(image=question[1], factor="height", sizeScale=(0, 0.3), positionScale=(0, 0.3), align="top", anchor="top")
     surfaceElements.append(image)
 
     y = 0.65
@@ -21,8 +21,20 @@ def getQuizElements(answerCommand, question, answers):
         ansLetter = Elements.TextBox(text=Elements.Text(text=ansLetters[i], fontSize=80, fontColor="white"), backgroundColor="gray", sizeScale=(.05, .125), positionScale=(0.025+i%2*0.5, y))
         surfaceElements.append(ansLetter)
 
-    nextQuestionButton = Elements.Image(file="img/arrowright.png", positionScale=(0.05, 0.5), sizeScale=(0.05,0.05))
+    nextQuestionTextBox = Elements.TextBox(text=Elements.Text("Następne", fontSize=40), positionScale=(0.9, 0.4), positionOffset=(-15,0), sizeScale=(.1,.05))
+    nextQuestionImage = Elements.Image(file="Main\\img\\arrowright.png", factor="height", positionScale=(0.9, 0.45), sizeScale=(0,0.075))
+    nextQuestionButton = Elements.Button(command=nextQuestionCommand, positionScale=(0.9,0.4), positionOffset=(-15,0), sizeOffset=(nextQuestionImage.size[0]+nextQuestionTextBox.size[0], nextQuestionImage.size[1]+nextQuestionTextBox.size[1]))
+
     surfaceElements.append(nextQuestionButton)
+    surfaceElements.append(nextQuestionTextBox)
+    surfaceElements.append(nextQuestionImage)
+
+    prevQuestionTextBox = Elements.TextBox(text=Elements.Text("Poprzednie", fontSize=40), positionScale=(0.025, 0.4), positionOffset=(-15,0), sizeScale=(.1,.05))
+    prevQuestionImage = Elements.Image(file="Main\\img\\arrowleft.png", factor="height", positionScale=(0.025, 0.45), sizeScale=(0,0.075))
+    prevQuestionButton = Elements.Button(command=prevQuestionCommand, positionScale=(0.025,0.4), positionOffset=(-15,0), sizeOffset=(prevQuestionImage.size[0]+prevQuestionTextBox.size[0], prevQuestionImage.size[1]+prevQuestionTextBox.size[1]))
+    surfaceElements.append(prevQuestionButton)
+    surfaceElements.append(prevQuestionTextBox)
+    surfaceElements.append(prevQuestionImage)
 
     return surfaceElements
 

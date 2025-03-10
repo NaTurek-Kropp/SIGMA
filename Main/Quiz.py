@@ -7,6 +7,8 @@ surfaceElements = []
 Questions = Data.GetQuestionsDataFixed("Data\pytania.txt")
 Answers = Data.Answers(Data.NumOfQuestions("Data\pytania.txt"))
 question = 0
+answer = ""
+images = []
 
 def main():
     pygame.init()
@@ -41,28 +43,59 @@ def main():
 
 def createSurface(surface: str):
     global surfaceElements
+    surfaceElements.clear()
     
     match surface:
         case "quiz":
-            surfaceElements = Surface.getQuizElements(answer, Questions[0][question], Questions[1][question])
+            questionImage = [Questions[0][question], images[0][question]]
+            answerImage = [Questions[1][question], images[1][question]]
+            surfaceElements = Surface.getQuizElements(answerFunc, nextQuestion, previousQuestion, questionImage, answerImage)
         case "starting":
             surfaceElements = Surface.getStartingElements()
         case "ending":
             surfaceElements = Surface.getEndingElements()
 
-def answer(answer):
-    global Answers
-    global question
-    Answers.AppendAnswer(question, answer)
+def answerFunc(newAnswer):
+    global answer
+    answer = newAnswer
 
 def nextQuestion():
     global question
+    global answer
+
+    Answers.AppendAnswer(question, answer)
     question+=1
+    answer = ""
+    
     createSurface("quiz")
 
 def previousQuestion():
     global question
+    global answer
+
+    Answers.AppendAnswer(question, answer)
     question-=1
+    answer = ""
+
     createSurface("quiz")
+
+def preloadAllImages():
+    questions = []
+    for i in Questions[0]:
+        if not i[1]: continue
+        questions.append(Elements.PreloadImage(i[1]))
+
+    answers = []
+    for qa in Questions[1]:
+        currAnswers = []
+        for i in qa:
+            if not i[1]: continue
+            currAnswers.append(Elements.PreloadImage(i[1]))
+        answers.append(currAnswers)
+
+    images.append(questions)
+    images.append(answers)
+
+preloadAllImages()
 
 main()
