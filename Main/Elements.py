@@ -29,25 +29,34 @@ class Text():
         return self.font.render(self.text, True, self.fontColor, self.backgroundColor)
 
 class Image():
-    def __init__(self, *, url, factor: Literal["height", "width", None], sizeScale=(0,0), sizeOffset=(0,0), positionScale=(0,0), positionOffset=(0,0), align: Literal["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"]="topleft", anchor: Literal["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"]="topleft"):
+    def __init__(self, *, url=None, file=None, factor: Literal["height", "width", None], sizeScale=(0,0), sizeOffset=(0,0), positionScale=(0,0), positionOffset=(0,0), align: Literal["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"]="topleft", anchor: Literal["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"]="topleft"):
         if not pygame.display.get_surface(): return
         self.surface = pygame.display.get_surface()
         self.factor = factor
         self.align = align
         self.anchor = anchor
+        self.image = None
 
         surfaceSize = self.surface.get_size()
         self.size = getSize(surfaceSize, sizeScale, sizeOffset)
         self.position = getPosition(surfaceSize, positionScale, positionOffset, self.size, self.align, self.anchor)
 
         self.imageUrl = url
+        self.imageFile = file
         self.loadImage()
 
         self.position = getPosition(surfaceSize, positionScale, positionOffset, self.size, self.align, self.anchor)
 
     def loadImage(self):
-        response = requests.get(self.imageUrl)
-        self.image = pygame.image.load(BytesIO(response.content))
+        if self.imageUrl:
+            try:
+                response = requests.get(self.imageUrl)
+                self.image = pygame.image.load(BytesIO(response.content))
+            except requests.ConnectionError:
+                print("Nie udało się pobrać obrazu")
+                return
+        else:
+            self.image = pygame.image.load(self.imageFile)
         
         imageSize = self.image.get_size()
         
@@ -63,6 +72,7 @@ class Image():
         self.size = self.image.get_size()
 
     def tick(self):
+        if not self.image: return
         self.surface.blit(self.image, self.position)
 
 class Button():

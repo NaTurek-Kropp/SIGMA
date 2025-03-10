@@ -1,7 +1,7 @@
 def NumOfQuestions(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
         lines = file.readlines()
-    return lines / 5
+    return len(lines) // 5
 
 def GetQuestionsDataFixed(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
@@ -44,11 +44,11 @@ questions = GetQuestionsDataFixed(file_path)
 
 
 class Answers:
-    def __init__(self):
-        self.answersTable = []
+    def __init__(self, numOfQuestions):
+        self.answersTable = [None] * numOfQuestions
 
-    def AppendAnswer(self,answer):
-        self.answersTable.append(answer)
+    def AppendAnswer(self,question,answer):
+        self.answersTable[question] = answer
     
     def Answers(self):
         return self.answersTable

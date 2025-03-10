@@ -4,7 +4,9 @@ import Data
 import Surface
 
 surfaceElements = []
-Answers = Data.Answers()
+Questions = Data.GetQuestionsDataFixed("Data\pytania.txt")
+Answers = Data.Answers(Data.NumOfQuestions("Data\pytania.txt"))
+question = 0
 
 def main():
     pygame.init()
@@ -42,7 +44,7 @@ def createSurface(surface: str):
     
     match surface:
         case "quiz":
-            surfaceElements = Surface.getQuizElements(answer)
+            surfaceElements = Surface.getQuizElements(answer, Questions[0][question], Questions[1][question])
         case "starting":
             surfaceElements = Surface.getStartingElements()
         case "ending":
@@ -50,7 +52,17 @@ def createSurface(surface: str):
 
 def answer(answer):
     global Answers
-    Answers.appendAnswer(answer)
-    print(answer)
+    global question
+    Answers.AppendAnswer(question, answer)
+
+def nextQuestion():
+    global question
+    question+=1
+    createSurface("quiz")
+
+def previousQuestion():
+    global question
+    question-=1
+    createSurface("quiz")
 
 main()
