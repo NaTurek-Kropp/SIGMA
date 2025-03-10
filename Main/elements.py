@@ -86,7 +86,7 @@ class Button():
         return pygame.Rect(self.position, self.size)
 
     def tick(self):
-        # pygame.draw.rect(self.surface, self.color, self.position + self.size)
+        pygame.draw.rect(self.surface, self.color, self.position + self.size)
         
         self.surface.blit(self.textrender, self.textRect)
 
