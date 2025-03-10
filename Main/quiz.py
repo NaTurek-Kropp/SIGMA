@@ -23,7 +23,6 @@ def main():
                 for button in surfaceElements:
                     if not isinstance(button, Elements.Button): continue
                     if button.getRect().collidepoint(mousePos):
-                        print(mousePos, button)
                         button.pressed()
 
         screen.fill("white")
