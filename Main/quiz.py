@@ -1,8 +1,10 @@
 import pygame
 import Elements
 import Data
+import Surface
 
 surfaceElements = []
+Answers = Data.Answers()
 
 def main():
     pygame.init()
@@ -11,7 +13,7 @@ def main():
     clock = pygame.time.Clock()
     running = True
 
-    createQuizElements()
+    createSurface("quiz")
 
     while running:
         for event in pygame.event.get():
@@ -35,29 +37,20 @@ def main():
 
     pygame.quit()
 
+def createSurface(surface: str):
+    global surfaceElements
+    
+    match surface:
+        case "quiz":
+            surfaceElements = Surface.getQuizElements(answer)
+        case "starting":
+            surfaceElements = Surface.getStartingElements()
+        case "ending":
+            surfaceElements = Surface.getEndingElements()
+
 def answer(answer):
-    # Data.Answers.appendAnswer(answer)
+    global Answers
+    Answers.appendAnswer(answer)
     print(answer)
-
-def createQuizElements():
-    clearSurfaceElements()
-
-    quizFrame = Elements.Rect(color="blue", sizeScale=(.9, .2), positionScale=(0, 0.05), align="top", anchor="top")
-    surfaceElements.append(quizFrame)
-
-    image = Elements.Image(url="https://www.pygame.org/docs/_static/pygame_tiny.png", factor="height", sizeScale=(0, 0.3), positionScale=(0, 0.3), align="top", anchor="top")
-    surfaceElements.append(image)
-
-    button1 = Elements.Button(color="red", text=Elements.Text("A", "arial", 50), command=lambda: answer("A"), sizeScale=(.4, .125), positionScale=(0.05, 0.7))
-    button2 = Elements.Button(color="red", text=Elements.Text("B", "arial", 50), command=lambda: answer("B"), sizeScale=(.4, .125), positionScale=(0.55, 0.7))
-    button3 = Elements.Button(color="red", text=Elements.Text("C", "arial", 50), command=lambda: answer("C"), sizeScale=(.4, .125), positionScale=(0.05, 0.85))
-    button4 = Elements.Button(color="red", text=Elements.Text("D", "arial", 50), command=lambda: answer("D"), sizeScale=(.4, .125), positionScale=(0.55, 0.85))
-    surfaceElements.append(button1)
-    surfaceElements.append(button2)
-    surfaceElements.append(button3)
-    surfaceElements.append(button4)
-
-def clearSurfaceElements():
-    surfaceElements.clear()
 
 main()
