@@ -19,8 +19,8 @@ class Rect():
         pygame.draw.rect(self.surface, self.color, self.position + self.size)
 
 class Text():
-    def __init__(self, text: str, font, fontSize: int=10, fontColor="black", backgroundColor=None):
-        self.font = pygame.font.SysFont(font, fontSize)
+    def __init__(self, text: str, font=pygame.font.get_default_font(), fontSize: int=10, fontColor="black", backgroundColor=None):
+        self.font = pygame.font.SysFont(font, fontSize) or pygame.font.Font(font, fontSize)
         self.text = text
         self.fontColor = fontColor
         self.backgroundColor = backgroundColor
@@ -87,11 +87,30 @@ class Button():
 
     def tick(self):
         pygame.draw.rect(self.surface, self.color, self.position + self.size)
-        
         self.surface.blit(self.textrender, self.textRect)
 
     def pressed(self):
         self.command()
+
+class TextBox():
+    def __init__(self, *, backgroundColor="white", text: Text, sizeScale=(0,0), sizeOffset=(0,0), positionScale=(0,0), positionOffset=(0,0), align: Literal["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"]="topleft", anchor: Literal["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"]="topleft"):
+        self.surface = pygame.display.get_surface()
+        self.backgroundColor = backgroundColor
+        self.align = align
+        self.anchor = anchor
+        self.text = text
+        self.textrender = text.render()
+        surfaceSize = self.surface.get_size()
+
+        self.size = getSize(surfaceSize, sizeScale, sizeOffset)
+        self.position = getPosition(surfaceSize, positionScale, positionOffset, self.size, self.align, self.anchor)
+
+        self.textRect = self.textrender.get_rect()
+        self.textRect.center = getCenter(self.size, self.position)
+
+    def tick(self):
+        pygame.draw.rect(self.surface, self.backgroundColor, self.position + self.size)
+        self.surface.blit(self.textrender, self.textRect)
 
 def getSize(surfaceSize, sizeScale, sizeOffset):
     return (surfaceSize[0]*(sizeScale[0]+sizeOffset[0]), surfaceSize[1]*(sizeScale[1]+sizeOffset[1]))
