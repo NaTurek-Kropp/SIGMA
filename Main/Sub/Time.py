@@ -1,15 +1,20 @@
 import time
+import sys
+import os
 
-timestamps = []
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+from Main import Data
+
+
+timestamps = [None] * Data.NumOfQuestions('Data/pytania.txt')
 
 def StartTimer():
     return time.time()
 
-def EndTimer(startTime):
+def EndTimer(startTime, questionIndex):
     endTime = time.time()
     elapsedTime = endTime - startTime
-    timestamps.append(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(endTime)))
-    return elapsedTime
+    timestamps[questionIndex] = (elapsedTime)
 
 def TimeStamps():
     return timestamps
