@@ -1,3 +1,8 @@
+def NumOfQuestions(file_path):
+    with open(file_path, 'r', encoding='utf-8') as file:
+        lines = file.readlines()
+    return lines / 5
+
 def GetQuestionsDataFixed(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
         lines = file.readlines()
@@ -5,7 +10,7 @@ def GetQuestionsDataFixed(file_path):
     ALL = []
     #QUESTIONS
     questions = []
-    for i in range(0, len(lines), 5):
+    for i in range(0, len(lines), NumOfQuestions(file_path)):
         questionExh = lines[i].strip().split(' ')
         question = []
         for e in questionExh:
@@ -37,7 +42,6 @@ def GetQuestionsDataFixed(file_path):
 file_path = 'Data/pytania.txt'
 questions = GetQuestionsDataFixed(file_path)
 
-#print(questions[1][1])
 
 class Answers:
     def __init__(self):
@@ -45,3 +49,6 @@ class Answers:
 
     def AppendAnswer(self,answer):
         self.answersTable.append(answer)
+    
+    def Answers(self):
+        return self.answersTable

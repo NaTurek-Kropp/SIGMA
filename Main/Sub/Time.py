@@ -10,3 +10,6 @@ def EndTimer(startTime):
     elapsedTime = endTime - startTime
     timestamps.append(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(endTime)))
     return elapsedTime
+
+def TimeStamps():
+    return timestamps
