@@ -5,6 +5,9 @@ import Surface
 import Sub.Time as Time
 import Send
 from ProjectData import Settings
+import requests
+import threading
+import time
 
 surfaceElements = []
 Questions = Data.GetQuestionsDataFixed("ProjectData\pytania.txt")
@@ -21,7 +24,7 @@ def main():
     clock = pygame.time.Clock()
     running = True
 
-    createSurface("quiz")
+    createSurface("starting")
 
     while running:
         for event in pygame.event.get():
@@ -45,6 +48,7 @@ def main():
 
     pygame.quit()
 
+
 def createSurface(surface: str):
     global surfaceElements
     global timer
@@ -64,8 +68,38 @@ def createSurface(surface: str):
                 answerImage.append([ans[0], image])
 
             surfaceElements = Surface.getQuizElements(answerFunc, nextQuestion, previousQuestion, questionImage, answerImage, question == len(Answers.Answers())-1)
+        case "lobby":
+            global lobby_data, lobby_code, lobby_id
+            response = requests.post('http://127.0.0.1:5000/create_lobby')
+            if response.status_code == 201:
+                lobby_data = response.json()
+                lobby_id = lobby_data['lobby_id']
+                lobby_code = lobby_data['lobby_code']
+                print(f"Lobby created with ID: {lobby_id} and code: {lobby_code}")
+                def check_lobby_updates(lobby_data, lobby_id, interval=5):
+                    while True:
+                        response = requests.get(f'http://127.0.0.1:5000/get_lobby_members', params={'lobby_id': lobby_id})
+                        if response.status_code == 200:
+                            print(response)
+                            new_lobby_data = response.json()
+                            if new_lobby_data != lobby_data:
+                                lobby_data = new_lobby_data
+                                createSurface("update-lobby")
+                        time.sleep(interval)
+
+                thread = threading.Thread(target=check_lobby_updates, args=(lobby_data, lobby_id,))
+                thread.daemon = True
+                thread.start()
+            else:
+                print("Failed to create lobby")
+            surfaceElements = Surface.getLobbyElements(lobby_code, [])
+        case "update-lobby":
+            data = requests.get(f'http://127.0.0.1:5000/get_lobby_members', params={'lobby_id': lobby_id})
+            members = data.json().get('members', [])
+            print(members)
+            surfaceElements = Surface.getLobbyElements(lobby_code, members)
         case "starting":
-            surfaceElements = Surface.getStartingElements()
+            surfaceElements = Surface.getStartingElements(lambda: createSurface("quiz"), lambda: createSurface("lobby"))
         case "ending":
             totalTime = 0
             for i in Time.TimeStamps():

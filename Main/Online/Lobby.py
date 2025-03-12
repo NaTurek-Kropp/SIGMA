@@ -4,6 +4,7 @@ import string
 class Member:
     def __init__(self, name):
         self.name = name
+        self.points = 0
 
 class LobbyServer:
     def __init__(self):
@@ -13,7 +14,10 @@ class LobbyServer:
 
     def generate_lobby_code(self):
         return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
-
+    
+    def get_lobby_id_from_code(self, lobby_code):
+        return self.lobby_codes.get(lobby_code)
+    
     def create_lobby(self):
         lobby_id = self.lobby_id_counter
         lobby_code = self.generate_lobby_code()
