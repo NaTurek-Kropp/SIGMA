@@ -3,6 +3,8 @@ import Elements
 import Data
 import Surface
 import Sub.Time as Time
+import Send
+from ProjectData import Settings
 
 surfaceElements = []
 Questions = Data.GetQuestionsDataFixed("ProjectData\pytania.txt")
@@ -54,8 +56,12 @@ def createSurface(surface: str):
             answerImage = []
             timer = Time.StartTimer()
 
+            indx = 0
             for ans in Questions[1][question]:
-                answerImage.append([ans[0], images[1][question]])
+                image = None
+                if images[1][question] != []:
+                    image = images[1][question][indx]
+                answerImage.append([ans[0], image])
 
             surfaceElements = Surface.getQuizElements(answerFunc, nextQuestion, previousQuestion, questionImage, answerImage, question == len(Answers.Answers())-1)
         case "starting":
@@ -65,8 +71,9 @@ def createSurface(surface: str):
             for i in Time.TimeStamps():
                 totalTime += i
             totalTime = round(totalTime)
-            
             surfaceElements = Surface.getEndingElements(totalTime)
+            
+            sendEmail()
 
 def answerFunc(newAnswer):
     global answer
@@ -119,6 +126,8 @@ def preloadAllImages():
     images.append(questions)
     images.append(answers)
 
-preloadAllImages()
+def sendEmail():
+    Send.send_email(Settings.GetSetting("email-adress"), Time.TimeStamps(), Answers.Answers(), ["Bratosz", "Turczewski"])
 
+preloadAllImages()
 main()
