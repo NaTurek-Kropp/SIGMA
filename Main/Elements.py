@@ -60,10 +60,11 @@ class Image():
         self.align = align
         self.anchor = anchor
         self.image = image.getImage()
+        self.positionScale = positionScale
+        self.positionOffset = positionOffset
 
         surfaceSize = self.surface.get_size()
         self.size = getSize(surfaceSize, sizeScale, sizeOffset)
-        self.position = getPosition(surfaceSize, positionScale, positionOffset, self.size, self.align, self.anchor)
         self.resizeFactor()
 
         self.position = getPosition(surfaceSize, positionScale, positionOffset, self.size, self.align, self.anchor)
@@ -82,6 +83,13 @@ class Image():
             self.image = pygame.transform.scale(self.image, self.size)
 
         self.size = self.image.get_size()
+
+    def changeSize(self, sizeScale=(0,0), sizeOffset=(0,0)):
+        surfaceSize = self.surface.get_size()
+        self.size = getSize(surfaceSize, sizeScale, sizeOffset)
+        self.resizeFactor()
+
+        self.position = getPosition(surfaceSize, self.positionScale, self.positionOffset, self.size, self.align, self.anchor)
 
     def tick(self):
         if not self.image: return
@@ -107,6 +115,12 @@ class Button():
 
     def getRect(self):
         return pygame.Rect(self.position, self.size)
+
+    def renderText(self):
+        if not self.text: return
+        self.textrender = self.text.render()
+        self.textRect = self.textrender.get_rect()
+        self.textRect.center = getCenter(self.size, self.position)
 
     def tick(self):
         pygame.draw.rect(self.surface, self.color, self.position + self.size)

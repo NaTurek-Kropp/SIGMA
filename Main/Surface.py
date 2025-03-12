@@ -1,5 +1,6 @@
 import Elements
 import pygame
+import Send
 
 buttons = {}
 buttonColor = pygame.Color(0,128,0)
@@ -19,12 +20,18 @@ def getQuizElements(answerCommand, nextQuestionCommand, prevQuestionCommand, que
     for i in range(4):
         if i == 2:
             y+=.15
-        answerButton = Elements.Button(color=pygame.Color(0,128,0), text=Elements.Text(text=answers[i][0], fontSize=80, fontColor="white"), sizeScale=(.4, .125), positionScale=(0.075+i%2*0.5,y))
-        answerButton.command = lambda ans=ansLetters[i], button=answerButton: answerQuestion(ans, answerCommand)
-        surfaceElements.append(answerButton)
+        
+        answerButton = Elements.Button(color=pygame.Color(0,128,0), text=Elements.Text(text=answers[i][0], fontSize=80, fontColor="white"), command=lambda ans=ansLetters[i]: answerQuestion(ans, answerCommand), sizeScale=(.4, .125), positionScale=(0.075+i%2*0.5,y))
         buttons[ansLetters[i]] = answerButton
 
+        if answers[i][1]:
+            ansImage = Elements.Image(image=answers[i][1], positionScale=(0.075+i%2*0.5+0.4,y), sizeScale=(0, .125), factor="height", anchor="topright")
+            answerButton.size = (answerButton.size[0]-ansImage.size[0], answerButton.size[1])
+            answerButton.renderText()
+            surfaceElements.append(ansImage)
+
         ansLetter = Elements.TextBox(text=Elements.Text(text=ansLetters[i], fontSize=80, fontColor="white"), backgroundColor="gray", sizeScale=(.05, .125), positionScale=(0.025+i%2*0.5, y))
+        surfaceElements.append(answerButton)
         surfaceElements.append(ansLetter)
 
     nextQuestionTextBox = Elements.TextBox(text=Elements.Text("Następne", fontSize=40), positionScale=(0.9, 0.4), positionOffset=(-15,0), sizeScale=(.1,.05))
@@ -73,8 +80,6 @@ def getStartingElements():
     return surfaceElements
 
 
-    return surfaceElements
-
 def getEndingElements(totalTime):
     surfaceElements = []
 
@@ -84,3 +89,13 @@ def getEndingElements(totalTime):
     surfaceElements.append(infoTextBox)
 
     return surfaceElements
+
+
+def getLobbyElements():
+    surfaceElements = []
+    titleTextBox = Elements.TextBox(text=Elements.Text(text="Lobby", fontSize=80, fontColor="white"), backgroundColor="blue", sizeScale=(.5, .2), positionScale=(0, 0.05), align="top", anchor="top")
+    surfaceElements.append(titleTextBox)
+
+    return surfaceElements
+
+# def addLobbyMember()
