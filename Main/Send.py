@@ -6,6 +6,9 @@ import random
 import Sub.Time as Time
 from dotenv import load_dotenv
 import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../Main")))
+from ProjectData import Settings
 
 load_dotenv() #env var
 
@@ -13,12 +16,13 @@ PASSWORD = os.getenv("EMAIL_PASS")
 
 
 ans = Data.Answers()
+ans = Data.Answers(Data.NumOfQuestions("ProjectData/pytania.txt"))
 answers = ['A', 'B', 'C', 'D']
 for _ in range(3):
     ans.AppendAnswer(_,random.choice(answers))
 
 def send_email(toAdress, time, answers, name):
-    fromAdress = 'bardzo.powarzny.email321@gmail.com'
+    fromAdress = Settings.GetSetting("email-adress")
     password = PASSWORD
 
     msg = MIMEMultipart()

@@ -1,11 +1,11 @@
 import pygame
 import Elements
-import Data
+import Main
 import Surface
 
 surfaceElements = []
-Questions = Data.GetQuestionsDataFixed("Data\pytania.txt")
-Answers = Data.Answers(Data.NumOfQuestions("Data\pytania.txt"))
+Questions = Main.GetQuestionsDataFixed("Data\pytania.txt")
+Answers = Main.Answers(Main.NumOfQuestions("Data\pytania.txt"))
 question = 0
 answer = ""
 images = []
