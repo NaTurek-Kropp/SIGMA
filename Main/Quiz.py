@@ -1,14 +1,16 @@
 import pygame
 import Elements
-import Main
+import Data
 import Surface
+import Sub.Time as Time
 
 surfaceElements = []
-Questions = Main.GetQuestionsDataFixed("Data\pytania.txt")
-Answers = Main.Answers(Main.NumOfQuestions("Data\pytania.txt"))
+Questions = Data.GetQuestionsDataFixed("ProjectData\pytania.txt")
+Answers = Data.Answers(Data.NumOfQuestions("ProjectData\pytania.txt"))
 question = 0
 answer = ""
 images = []
+timer = None
 
 def main():
     pygame.init()
@@ -43,17 +45,28 @@ def main():
 
 def createSurface(surface: str):
     global surfaceElements
+    global timer
     surfaceElements.clear()
     
     match surface:
         case "quiz":
-            questionImage = [Questions[0][question], images[0][question]]
-            answerImage = [Questions[1][question], images[1][question]]
-            surfaceElements = Surface.getQuizElements(answerFunc, nextQuestion, previousQuestion, questionImage, answerImage)
+            questionImage = [Questions[0][question][0], images[0][question]]
+            answerImage = []
+            timer = Time.StartTimer()
+
+            for ans in Questions[1][question]:
+                answerImage.append([ans[0], images[1][question]])
+
+            surfaceElements = Surface.getQuizElements(answerFunc, nextQuestion, previousQuestion, questionImage, answerImage, question == len(Answers.Answers())-1)
         case "starting":
             surfaceElements = Surface.getStartingElements()
         case "ending":
-            surfaceElements = Surface.getEndingElements()
+            totalTime = 0
+            for i in Time.TimeStamps():
+                totalTime += i
+            totalTime = round(totalTime)
+            
+            surfaceElements = Surface.getEndingElements(totalTime)
 
 def answerFunc(newAnswer):
     global answer
@@ -64,20 +77,30 @@ def nextQuestion():
     global answer
 
     Answers.AppendAnswer(question, answer)
-    question+=1
-    answer = ""
-    
-    createSurface("quiz")
+    Time.EndTimer(timer, question)
+    if len(Answers.Answers())-1 > question:
+        question+=1
+        answer = Answers.Answers()[question]
+
+        createSurface("quiz")
+        Surface.setSelectedAnswer(answer)
+    else:
+        createSurface("ending")
 
 def previousQuestion():
     global question
     global answer
 
+    if question <= 0: return
+
+    Time.EndTimer(timer, question)
+
     Answers.AppendAnswer(question, answer)
     question-=1
-    answer = ""
+    answer = Answers.Answers()[question]
 
     createSurface("quiz")
+    Surface.setSelectedAnswer(answer)
 
 def preloadAllImages():
     questions = []
