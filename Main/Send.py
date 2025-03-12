@@ -12,7 +12,7 @@ load_dotenv() #env var
 PASSWORD = os.getenv("EMAIL_PASS")
 
 
-ans = Data.Answers(Data.NumOfQuestions('Data/pytania.txt'))
+ans = Data.Answers()
 answers = ['A', 'B', 'C', 'D']
 for _ in range(3):
     ans.AppendAnswer(_,random.choice(answers))
