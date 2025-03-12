@@ -16,6 +16,7 @@ def GetQuestionsDataFixed(file_path):
         for e in questionExh:
             if e.startswith('http://') or e.startswith('https://'):
                 questions.append([" ".join(question), e])
+                question.clear()
             else:
                 question.append(e)
         #ANSWERS
@@ -36,8 +37,11 @@ def GetQuestionsDataFixed(file_path):
         
         ALL.append(answers)
     return questions, ALL
+ 
 
-file_path = 'Data/pytania.txt'
+
+file_path = 'ProjectData/pytania.txt'
+
 questions = GetQuestionsDataFixed(file_path)
 
 class Answers:
