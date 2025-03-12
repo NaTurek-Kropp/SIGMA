@@ -12,6 +12,7 @@ from ProjectData import Settings
 
 load_dotenv() #env var
 
+EMAIL = os.getenv("EMAIL_ACC")
 PASSWORD = os.getenv("EMAIL_PASS")
 
 
@@ -22,7 +23,7 @@ for _ in range(3):
     ans.AppendAnswer(_,random.choice(answers))
 
 def send_email(toAdress, time, answers, name):
-    fromAdress = Settings.GetSetting("email-adress")
+    fromAdress = EMAIL
     password = PASSWORD
 
     msg = MIMEMultipart()
@@ -43,7 +44,7 @@ def send_email(toAdress, time, answers, name):
     except Exception as e:
         print(f"Error: {e}")
 
-send_email('mikolajmaczewski298@gmail.com',Time.TimeStamps(), ans.Answers(), ['Bartosz', 'Turek'])
+send_email(Settings.GetSetting("email-adress"),Time.TimeStamps(), ans.Answers(), ['Bartosz', 'Turek'])
 
 
 

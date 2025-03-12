@@ -40,6 +40,20 @@ def getQuizElements(answerCommand, nextQuestionCommand, prevQuestionCommand, que
 
 def getStartingElements():
     surfaceElements = []
+    titleTextBox = Elements.TextBox(text=Elements.Text(text="Start Page", fontSize=80, fontColor="white"), backgroundColor="blue", sizeScale=(.5, .2), positionScale=(0.25, 0.1), align="center", anchor="center")
+    surfaceElements.append(titleTextBox)
+
+    startButton = Elements.Button(color=pygame.Color(0,128,0), text=Elements.Text(text="Start", fontSize=80, fontColor="white"), command=lambda: print("Start button pressed"), sizeScale=(.3, .125), positionScale=(0.35, 0.4))
+    surfaceElements.append(startButton)
+
+    startRoomButton = Elements.Button(color=pygame.Color(0,128,0), text=Elements.Text(text="Start Room", fontSize=80, fontColor="white"), command=lambda: print("Start Room button pressed"), sizeScale=(.3, .125), positionScale=(0.35, 0.55))
+    surfaceElements.append(startRoomButton)
+
+    exitButton = Elements.Button(color=pygame.Color(255,0,0), text=Elements.Text(text="Exit", fontSize=80, fontColor="white"), command=lambda: print("Exit button pressed"), sizeScale=(.3, .125), positionScale=(0.35, 0.7))
+    surfaceElements.append(exitButton)
+
+    return surfaceElements
+
 
 def getEndingElements(totalTime):
     surfaceElements = []
