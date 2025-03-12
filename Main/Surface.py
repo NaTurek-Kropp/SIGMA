@@ -41,5 +41,13 @@ def getQuizElements(answerCommand, nextQuestionCommand, prevQuestionCommand, que
 def getStartingElements():
     surfaceElements = []
 
-def getEndingElements():
+def getEndingElements(totalTime):
     surfaceElements = []
+
+    timeTextBox = Elements.TextBox(text=Elements.Text(text=f"Twój czas to: {totalTime}!", fontSize=80, fontColor="white"), backgroundColor="black", sizeScale=(.5, .2), positionScale=(0.25, 0.4), align="center", anchor="center")
+    surfaceElements.append(timeTextBox)
+    infoTextBox = Elements.TextBox(text=Elements.Text(text="Twoje odpowiedzi oraz icc czas udzielenia został wysłany nauczycielowi", fontSize=40, fontColor="white"), backgroundColor="black", sizeScale=(.8, .1), positionScale=(0.1, 0.6), align="center", anchor="center")
+    surfaceElements.append(infoTextBox)
+
+    return surfaceElements
+

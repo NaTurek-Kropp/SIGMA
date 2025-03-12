@@ -14,7 +14,11 @@ def StartTimer():
 def EndTimer(startTime, questionIndex):
     endTime = time.time()
     elapsedTime = endTime - startTime
-    timestamps[questionIndex] = (elapsedTime)
+    timestamps[questionIndex] = (round(elapsedTime, 2))
 
 def TimeStamps():
     return timestamps
+
+def GetTotalTime():
+    total_time = sum(filter(None, timestamps))
+    return round(total_time, 2)
