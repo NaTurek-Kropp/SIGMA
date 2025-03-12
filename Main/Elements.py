@@ -28,36 +28,45 @@ class Text():
     def render(self):
         return self.font.render(self.text, True, self.fontColor, self.backgroundColor)
 
-class Image():
-    def __init__(self, *, url=None, file=None, factor: Literal["height", "width", None], sizeScale=(0,0), sizeOffset=(0,0), positionScale=(0,0), positionOffset=(0,0), align: Literal["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"]="topleft", anchor: Literal["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"]="topleft"):
-        if not pygame.display.get_surface(): return
-        self.surface = pygame.display.get_surface()
-        self.factor = factor
-        self.align = align
-        self.anchor = anchor
+class PreloadImage():
+    def __init__(self, url=None, file=None):
         self.image = None
+        self.url = url
+        self.file = file
 
-        surfaceSize = self.surface.get_size()
-        self.size = getSize(surfaceSize, sizeScale, sizeOffset)
-        self.position = getPosition(surfaceSize, positionScale, positionOffset, self.size, self.align, self.anchor)
-
-        self.imageUrl = url
-        self.imageFile = file
         self.loadImage()
 
-        self.position = getPosition(surfaceSize, positionScale, positionOffset, self.size, self.align, self.anchor)
-
     def loadImage(self):
-        if self.imageUrl:
+        if self.url:
             try:
-                response = requests.get(self.imageUrl)
+                response = requests.get(self.url)
                 self.image = pygame.image.load(BytesIO(response.content))
             except requests.ConnectionError:
                 print("Nie udało się pobrać obrazu")
                 return
         else:
-            self.image = pygame.image.load(self.imageFile)
-        
+            self.image = pygame.image.load(self.file)
+
+    def getImage(self):
+        return self.image
+
+class Image():
+    def __init__(self, *, image: PreloadImage, factor: Literal["height", "width", None], sizeScale=(0,0), sizeOffset=(0,0), positionScale=(0,0), positionOffset=(0,0), align: Literal["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"]="topleft", anchor: Literal["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"]="topleft"):
+        if not pygame.display.get_surface(): return
+        self.surface = pygame.display.get_surface()
+        self.factor = factor
+        self.align = align
+        self.anchor = anchor
+        self.image = image.getImage()
+
+        surfaceSize = self.surface.get_size()
+        self.size = getSize(surfaceSize, sizeScale, sizeOffset)
+        self.position = getPosition(surfaceSize, positionScale, positionOffset, self.size, self.align, self.anchor)
+        self.resizeFactor()
+
+        self.position = getPosition(surfaceSize, positionScale, positionOffset, self.size, self.align, self.anchor)
+
+    def resizeFactor(self):
         imageSize = self.image.get_size()
         
         if self.factor == "height":
@@ -76,28 +85,31 @@ class Image():
         self.surface.blit(self.image, self.position)
 
 class Button():
-    def __init__(self, *, color="white", text: Text, command: Callable, sizeScale=(0,0), sizeOffset=(0,0), positionScale=(0,0), positionOffset=(0,0), align: Literal["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"]="topleft", anchor: Literal["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"]="topleft"):
+    def __init__(self, *, color="white", text: Text=None, command: Callable, sizeScale=(0,0), sizeOffset=(0,0), positionScale=(0,0), positionOffset=(0,0), align: Literal["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"]="topleft", anchor: Literal["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"]="topleft"):
         self.surface = pygame.display.get_surface()
         self.color = color
         self.align = align
         self.anchor = anchor
-        self.text = text
-        self.textrender = text.render()
         self.command = command
 
         surfaceSize = self.surface.get_size()
         self.size = getSize(surfaceSize, sizeScale, sizeOffset)
         self.position = getPosition(surfaceSize, positionScale, positionOffset, self.size, self.align, self.anchor)
 
-        self.textRect = self.textrender.get_rect()
-        self.textRect.center = getCenter(self.size, self.position)
+        self.text = text
+        if self.text:
+            self.textrender = text.render()
+            self.textRect = self.textrender.get_rect()
+            self.textRect.center = getCenter(self.size, self.position)
 
     def getRect(self):
         return pygame.Rect(self.position, self.size)
 
     def tick(self):
         pygame.draw.rect(self.surface, self.color, self.position + self.size)
-        self.surface.blit(self.textrender, self.textRect)
+
+        if self.text:
+            self.surface.blit(self.textrender, self.textRect)
 
     def pressed(self):
         self.command()
@@ -123,7 +135,7 @@ class TextBox():
         self.surface.blit(self.textrender, self.textRect)
 
 def getSize(surfaceSize, sizeScale, sizeOffset):
-    return (surfaceSize[0]*(sizeScale[0]+sizeOffset[0]), surfaceSize[1]*(sizeScale[1]+sizeOffset[1]))
+    return (surfaceSize[0]*(sizeScale[0])+sizeOffset[0], surfaceSize[1]*(sizeScale[1])+sizeOffset[1])
 
 def getPosition(surfaceSize, positionScale, positionOffset, size, align, anchor):
     align = getAlignAnchor(surfaceSize, align)
