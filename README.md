@@ -32,6 +32,7 @@ plik Elements.py tworzy obiekty<br>
 plik Send.py przesyła odpowiedzi na pytania i czas w którym użytkownik zakończył quiz na email użytkownika<br>
 plik Data.py pobiera dane z pliku pytania.txt<br>
 plik pytania.txt zawiera pytania i odpowiedzi<br>
+w pliku Settings.config można ustawić limit czasowy<br>
 
 
 # Licencja
