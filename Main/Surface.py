@@ -52,6 +52,38 @@ def getQuizElements(answerCommand, nextQuestionCommand, prevQuestionCommand, que
 
     return surfaceElements
 
+def getOnlineQuizElements(answerCommand, nextQuestionCommand, prevQuestionCommand, question, answers, isLastQuestion=False):
+    ansLetters = ["A", "B", "C", "D"]
+    surfaceElements = []
+    buttons.clear()
+
+    questionTextBox = Elements.TextBox(text=Elements.Text(text=question[0], fontSize=80, fontColor="white"), backgroundColor="blue", sizeScale=(.9, .2), positionScale=(0, 0.05), align="top", anchor="top")
+    surfaceElements.append(questionTextBox)
+
+    image = Elements.Image(image=question[1], factor="height", sizeScale=(0, 0.3), positionScale=(0, 0.3), align="top", anchor="top")
+    surfaceElements.append(image)
+
+    y = 0.65
+    for i in range(4):
+        if i == 2:
+            y+=.15
+        
+        answerButton = Elements.TextBox(backgroundColor=pygame.Color(0,128,0), text=Elements.Text(text=answers[i][0], fontSize=80, fontColor="white"), sizeScale=(.4, .125), positionScale=(0.075+i%2*0.5,y))
+        buttons[ansLetters[i]] = answerButton
+
+        if answers[i][1]:
+            ansImage = Elements.Image(image=answers[i][1], positionScale=(0.075+i%2*0.5+0.4,y), sizeScale=(0, .125), factor="height", anchor="topright")
+            answerButton.size = (answerButton.size[0]-ansImage.size[0], answerButton.size[1])
+            answerButton.renderText()
+            surfaceElements.append(ansImage)
+
+        ansLetter = Elements.TextBox(text=Elements.Text(text=ansLetters[i], fontSize=80, fontColor="white"), backgroundColor="gray", sizeScale=(.05, .125), positionScale=(0.025+i%2*0.5, y))
+        surfaceElements.append(answerButton)
+        surfaceElements.append(ansLetter)
+        
+        return surfaceElements
+
+
 def answerQuestion(answer, answerCommand):
     setSelectedAnswer(answer)
     answerCommand(answer)
@@ -88,7 +120,8 @@ def getEndingElements(totalTime):
     return surfaceElements
 
 
-def getLobbyElements(code, members):
+def getLobbyElements(code, members, startGameCommand, isOnlineCommand):
+    isOnlineCommand()
     surfaceElements = []
     titleTextBox = Elements.TextBox(text=Elements.Text(text="Lobby", fontSize=80, fontColor="white"), backgroundColor="blue", sizeScale=(.5, .2), positionScale=(0, 0.05), align="top", anchor="top")
     surfaceElements.append(titleTextBox)
@@ -104,4 +137,6 @@ def getLobbyElements(code, members):
         surfaceElements.append(memberTextBox)
         y += 0.1
 
+        startGameButton = Elements.Button(color=pygame.Color(0,128,0), text=Elements.Text(text="Start Game", fontSize=80, fontColor="white"), command=startGameCommand, sizeScale=(.3, .125), positionScale=(0.35, 0.8))
+        surfaceElements.append(startGameButton)
     return surfaceElements

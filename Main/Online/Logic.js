@@ -1,12 +1,14 @@
+window.member_name = ""
+
 document.addEventListener('DOMContentLoaded', () => {
     const joinButton = document.getElementById('joinLobbyButton');
     const codeInput = document.getElementById('lobbyCodeInput');
 
     joinButton.addEventListener('click', async () => {
         const lobbyCode = codeInput.value.trim();
-        const memberName = prompt("Enter your name:");
+        member_name = prompt("Enter your name:");
 
-        if (!lobbyCode || !memberName) {
+        if (!lobbyCode || !member_name) {
             alert('Please enter a valid lobby code and your name.');
             return;
         }
@@ -17,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ lobby_code: lobbyCode, member_name: memberName })
+                body: JSON.stringify({ lobby_code: lobbyCode, member_name: member_name })
             });
 
             const result = await response.json();

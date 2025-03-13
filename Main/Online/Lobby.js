@@ -20,24 +20,31 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-function checkLobbyUpdates(lobbyCode, interval = 5000) {
+async function fetchLobbyId(lobbyCode) {
+    const response = await fetch(`http://127.0.0.1:5000/get_lobby_id_from_code?lobby_code=${lobbyCode}`);
+    if (!response.ok) throw new Error('Failed to fetch lobby id');
+    return response.json();
+}
+
+async function fetchLobbyMembers(lobbyId) {
+    const response = await fetch(`http://127.0.0.1:5000/get_lobby_members?lobby_id=${lobbyId}`);
+    if (!response.ok) throw new Error('Failed to fetch lobby members');
+    return response.json();
+}
+
+async function fetchGameStarted(lobbyId) {
+    const response = await fetch(`http://127.0.0.1:5000/is_game_started?lobby_id=${lobbyId}`);
+    if (!response.ok) throw new Error('Failed to fetch game status');
+    return response.json();
+}
+
+async function checkLobbyUpdates(lobbyCode, interval = 5000) {
     setInterval(async () => {
         try {
-            const response = await fetch(`http://127.0.0.1:5000/get_lobby_id_from_code?lobby_code=${lobbyCode}`)
-            if (response.ok) {
-                const lobbyId = await response.json();
-                console.log(lobbyId)
-                const membersResponse = await fetch(`http://127.0.0.1:5000/get_lobby_members?lobby_id=${lobbyId["lobby_id"]}`);
-                if (membersResponse.ok) {
-                    const data = await membersResponse.json();
-                    updateLobby(data.members);
-                } else {
-                    console.error('Failed to fetch lobby members');
-                }
-            }
-            else {
-                console.error('Failed to fetch lobby id')
-            }
+            const lobbyId = await fetchLobbyId(lobbyCode);
+            const membersData = await fetchLobbyMembers(lobbyId.lobby_id);
+            const gameStarted = await fetchGameStarted(lobbyId.lobby_id);
+            updateLobby(membersData.members, gameStarted);
         } catch (error) {
             console.error('Error:', error);
         }
@@ -45,7 +52,10 @@ function checkLobbyUpdates(lobbyCode, interval = 5000) {
 }
 
 
-function updateLobby(members) {
+function updateLobby(members, gameStarted) {
+    if (gameStarted == true) {
+        window.location.href = `http://127.0.0.1:5500/Main/Online/game.html?lobby_code=${lobbyCode}`
+    }
     const membersContainer = document.querySelector('.members');
     membersContainer.innerHTML = '';
     members.forEach(member => {

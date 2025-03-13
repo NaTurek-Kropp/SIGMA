@@ -14,6 +14,35 @@ def create_lobby():
     return jsonify({'lobby_id': lobby_id, 'lobby_code': lobby_code}), 201
 
 
+@app.route('/set_questions', methods=['POST'])
+def set_questions():
+    data = request.get_json()
+    questions = data.get('questions')
+
+    if not questions:
+        return jsonify({'message': 'Questions list is required'}), 400
+
+    server.questions = questions 
+    
+@app.route('/get_questions', methods=['GET'])
+def get_questions():
+    return server.questions, 200
+
+@app.route('/submit_answer', methods=['POST'])
+def submit_answer():
+    data = request.get_json()
+    lobby_id = data.get('lobby_id')
+    member_name = data.get('member_name')
+    answer = data.get('answer')
+
+    if not lobby_id or not member_name or not answer:
+        return jsonify({'message': 'Lobby ID, member name, and answer are required'}), 400
+
+    if server.submit_answer(lobby_id, member_name, answer):
+        return jsonify({'message': 'Answer submitted successfully'}), 200
+    else:
+        return jsonify({'message': 'Failed to submit answer'}), 400
+
 @app.route('/get_lobby_id_from_code', methods=['GET'])
 def get_lobby_id_from_code():
     lobby_code = request.args.get('lobby_code')
@@ -27,6 +56,17 @@ def get_lobby_id_from_code():
     else:
         return jsonify({'message': 'Invalid lobby code'}), 400
     
+@app.route('/all_members_submitted', methods=['GET'])
+def all_members_submitted():
+    lobby_id = request.args.get('lobby_id')
+
+    if not lobby_id:
+        return jsonify({'message': 'Lobby ID is required'}), 400
+
+    if server.all_members_submitted(int(lobby_id)):
+        return jsonify({'all_submitted': True}), 200
+    else:
+        return jsonify({'all_submitted': False}), 200
 @app.route('/join_lobby', methods=['POST'])
 def join_lobby():
     data = request.get_json()
@@ -40,7 +80,32 @@ def join_lobby():
     if server.join_lobby_with_code(lobby_code, member):
         return jsonify({'message': f'{member_name} joined lobby {lobby_code}'}), 200
     else:
-        return jsonify({'message': 'Invalid lobby code or lobby is full'}), 400
+        return jsonify({'message': 'Invalid lobby code'}), 400
+
+@app.route('/start_game', methods=['POST'])
+def start_game():
+    data = request.get_json()
+    lobby_id = data.get('lobby_id')
+
+    if not lobby_id:
+        return jsonify({'message': 'Lobby ID is required'}), 400
+
+    if server.start_game(lobby_id):
+        return jsonify({'message': 'Game started successfully'}), 200
+    else:
+        return jsonify({'message': 'Failed to start game'}), 400
+
+@app.route('/is_game_started', methods=['GET'])
+def is_game_started():
+    lobby_id = request.args.get('lobby_id')
+
+    if not lobby_id:
+        return jsonify({'message': 'Lobby ID is required'}), 400
+
+    if server.is_game_started(lobby_id):
+        return jsonify({'game_started': True}), 200
+    else:
+        return jsonify({'game_started': False}), 200
 
 @app.route('/leave_lobby', methods=['POST'])
 def leave_lobby():

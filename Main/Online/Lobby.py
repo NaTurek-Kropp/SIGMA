@@ -4,13 +4,16 @@ import string
 class Member:
     def __init__(self, name):
         self.name = name
-        self.points = 0
-
+        self.aswers = []
+        
 class LobbyServer:
     def __init__(self):
         self.lobbies = {}
         self.lobby_id_counter = 1
         self.lobby_codes = {}
+        self.questions = {}
+        self.gameStarted = {}
+        self.round = {}
 
     def generate_lobby_code(self):
         return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
@@ -35,10 +38,43 @@ class LobbyServer:
 
     def join_lobby_with_code(self, lobby_code, member):
         lobby_id = self.lobby_codes.get(lobby_code)
-        if lobby_id:
+        if lobby_id and not any(m.name == member.name for m in self.lobbies.get(lobby_id, [])):
             return self.connect_member_to_lobby(lobby_id, member)
         else:
             return False
+        
+    def start_game(self, lobby_id):
+        if lobby_id in self.lobbies:
+            self.questions[lobby_id] = []
+            self.gameStarted[lobby_id] = True
+            return True
+        else:
+            return False
+        
+    def is_game_started(self, lobby_id):
+        print(self.lobbies)
+        if lobby_id in self.lobbies:
+            print(self.gameStarted.get(lobby_id))
+            return self.gameStarted.get(lobby_id)
+        else:
+            return BaseException("No such lobby id!")
+    
+    def submit_answer(self, lobby_id, member_name, answer):
+        if lobby_id in self.lobbies:
+            for member in self.lobbies[lobby_id]:
+                if member.name == member_name:
+                    member.answers.append(answer)
+                    return True
+        return False
+    
+    def all_members_submitted(self, lobby_id):
+        if lobby_id in self.lobbies and lobby_id in self.round:
+            current_round = self.round[lobby_id]
+            for member in self.lobbies[lobby_id]:
+                if len(member.answers) != current_round:
+                    return False
+            return True
+        return False
 
     def leave_lobby(self, lobby_id, member):
         if lobby_id in self.lobbies and member in self.lobbies[lobby_id]:
@@ -49,27 +85,5 @@ class LobbyServer:
 
     def get_lobby_members(self, lobby_id):
         return self.lobbies.get(lobby_id, [])
+    
 
-
-# Example usage
-if __name__ == "__main__":
-    server = LobbyServer()
-    lobby_id, lobby_code = server.create_lobby()
-    print(f"Created lobby with ID: {lobby_id} and code: {lobby_code}")
-
-    member = Member("Member1")
-    if server.join_lobby_with_code(lobby_code, member):
-        print(f"{member.name} joined lobby with code {lobby_code}")
-    else:
-        print(f"Failed to join lobby with code {lobby_code}")
-
-    members = server.get_lobby_members(lobby_id)
-    print(f"Members in lobby {lobby_id}: {[member.name for member in members]}")
-
-    if server.leave_lobby(lobby_id, member):
-        print(f"{member.name} left lobby {lobby_id}")
-    else:
-        print(f"Failed to leave lobby {lobby_id}")
-
-    members = server.get_lobby_members(lobby_id)
-    print(f"Members in lobby {lobby_id}: {[member.name for member in members]}")
