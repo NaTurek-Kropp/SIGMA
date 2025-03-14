@@ -13,18 +13,24 @@ function getLobbyCodeFromURL() {
     const params = new URLSearchParams(window.location.search);
     return params.get('lobby_code'); 
 }
+function getMemberNameFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('member_name'); 
+}
 const lobbyCode = getLobbyCodeFromURL();
+const memberName = getMemberNameFromUrl();
 
 async function sendAnswerToServer(answer) {
     const response = await fetch(`http://127.0.0.1:5000/get_lobby_id_from_code?lobby_code=${lobbyCode}`)
     if (response.ok) {
-        const lobbyId= await response.json()
+        const lobbyId = await response.json()
+        console.log(lobbyId.lobby_id, memberName, answer)
         fetch('http://127.0.0.1:5000/submit_answer', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ lobby_id: lobbyId, member_name: window.member_name, answer: answer})
+            body: JSON.stringify({ lobby_id: lobbyId.lobby_id, member_name: memberName, answer: answer})
         })
         .then(response => response.json())
         .then(data => {

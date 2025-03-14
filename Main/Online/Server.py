@@ -103,6 +103,7 @@ def is_game_started():
         return jsonify({'message': 'Lobby ID is required'}), 400
 
     if server.is_game_started(lobby_id):
+        print(server.is_game_started(lobby_id))
         return jsonify({'game_started': True}), 200
     else:
         return jsonify({'game_started': False}), 200

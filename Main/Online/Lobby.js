@@ -5,8 +5,13 @@ function getLobbyCodeFromURL() {
     const params = new URLSearchParams(window.location.search);
     return params.get('lobby_code'); 
 }
+function getMemberNameFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('member_name'); 
+}
 
 const lobbyCode = getLobbyCodeFromURL();
+const member_name = getMemberNameFromUrl();
 document.addEventListener('DOMContentLoaded', () => {
     if (!lobbyCode) {
         alert("Invalid lobby Code!");
@@ -44,6 +49,8 @@ async function checkLobbyUpdates(lobbyCode, interval = 5000) {
             const lobbyId = await fetchLobbyId(lobbyCode);
             const membersData = await fetchLobbyMembers(lobbyId.lobby_id);
             const gameStarted = await fetchGameStarted(lobbyId.lobby_id);
+            console.log(lobbyId.lobby_id)
+            console.log(gameStarted)
             updateLobby(membersData.members, gameStarted);
         } catch (error) {
             console.error('Error:', error);
@@ -53,8 +60,8 @@ async function checkLobbyUpdates(lobbyCode, interval = 5000) {
 
 
 function updateLobby(members, gameStarted) {
-    if (gameStarted == true) {
-        window.location.href = `http://127.0.0.1:5500/Main/Online/game.html?lobby_code=${lobbyCode}`
+    if (gameStarted.game_started == true) {
+        window.location.href = `http://127.0.0.1:5500/Main/Online/game.html?lobby_code=${lobbyCode}&member_name=${member_name}`
     }
     const membersContainer = document.querySelector('.members');
     membersContainer.innerHTML = '';

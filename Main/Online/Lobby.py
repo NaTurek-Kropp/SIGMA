@@ -46,18 +46,16 @@ class LobbyServer:
     def start_game(self, lobby_id):
         if lobby_id in self.lobbies:
             self.questions[lobby_id] = []
+            print("Started game!")
             self.gameStarted[lobby_id] = True
             return True
         else:
             return False
         
     def is_game_started(self, lobby_id):
-        print(self.lobbies)
-        if lobby_id in self.lobbies:
-            print(self.gameStarted.get(lobby_id))
-            return self.gameStarted.get(lobby_id)
-        else:
-            return BaseException("No such lobby id!")
+        id = int(lobby_id)
+        print(self.gameStarted.get(id))
+        return self.gameStarted.get(id)
     
     def submit_answer(self, lobby_id, member_name, answer):
         if lobby_id in self.lobbies:
@@ -87,3 +85,19 @@ class LobbyServer:
         return self.lobbies.get(lobby_id, [])
     
 
+def test_create_lobby_and_start_game():
+    server = LobbyServer()
+    
+    lobby_id, lobby_code = server.create_lobby()
+    assert lobby_id is not None and lobby_code is not None, "Lobby creation failed!"
+    print(f"Lobby created with ID: {lobby_id}, Code: {lobby_code}")
+    
+    game_started = server.start_game(lobby_id)
+    assert game_started, "Failed to start the game!"
+    print("Game started successfully!")
+    
+    print(lobby_id)
+    assert server.is_game_started(lobby_id), "Game should be started but is not!"
+    print("Game start status verified!")
+
+test_create_lobby_and_start_game()

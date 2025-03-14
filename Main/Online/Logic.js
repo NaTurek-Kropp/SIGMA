@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (response.ok) {
                 alert(result.message);
-                window.location.href = `http://127.0.0.1:5500/Main/Online/lobby.html?lobby_code=${lobbyCode}`;
+                window.location.href = `http://127.0.0.1:5500/Main/Online/lobby.html?lobby_code=${lobbyCode}&member_name=${member_name}`;
             } else {
                 alert('Error: ' + result.message);
             }
