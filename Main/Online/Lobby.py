@@ -4,7 +4,7 @@ import string
 class Member:
     def __init__(self, name):
         self.name = name
-        self.aswers = []
+        self.answers = []
         
 class LobbyServer:
     def __init__(self):
@@ -38,8 +38,8 @@ class LobbyServer:
 
     def join_lobby_with_code(self, lobby_code, member):
         lobby_id = self.lobby_codes.get(lobby_code)
-        if lobby_id and not any(m.name == member.name for m in self.lobbies.get(lobby_id, [])):
-            return self.connect_member_to_lobby(lobby_id, member)
+        if lobby_id and not any(m.name == member for m in self.lobbies.get(lobby_id, [])):
+            return self.connect_member_to_lobby(lobby_id, Member(member))
         else:
             return False
         
@@ -59,6 +59,7 @@ class LobbyServer:
     
     def submit_answer(self, lobby_id, member_name, answer):
         if lobby_id in self.lobbies:
+            print(self.lobbies[lobby_id])
             for member in self.lobbies[lobby_id]:
                 if member.name == member_name:
                     member.answers.append(answer)
@@ -82,7 +83,9 @@ class LobbyServer:
             return False
 
     def get_lobby_members(self, lobby_id):
-        return self.lobbies.get(lobby_id, [])
+        members = self.lobbies.get(lobby_id, [])
+
+        return [member.name for member in members]
     
 
 def test_create_lobby_and_start_game():
@@ -91,7 +94,9 @@ def test_create_lobby_and_start_game():
     lobby_id, lobby_code = server.create_lobby()
     assert lobby_id is not None and lobby_code is not None, "Lobby creation failed!"
     print(f"Lobby created with ID: {lobby_id}, Code: {lobby_code}")
-    
+
+    server.join_lobby_with_code(lobby_code, "A")
+
     game_started = server.start_game(lobby_id)
     assert game_started, "Failed to start the game!"
     print("Game started successfully!")
@@ -100,4 +105,5 @@ def test_create_lobby_and_start_game():
     assert server.is_game_started(lobby_id), "Game should be started but is not!"
     print("Game start status verified!")
 
+    server.submit_answer(lobby_id, "A", "B")
 test_create_lobby_and_start_game()

@@ -1,12 +1,17 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_bcrypt import Bcrypt
 from Lobby import LobbyServer, Member
 from flask_cors import CORS 
+from flask_cors import cross_origin
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
 server = LobbyServer()
-CORS(app) #kurwa mać
+CORS(app, resources={r"/*": {"origins": "*"}})  #japierdole kurwa mać
+
+@app.route('/')
+def home():
+    return render_template('Main/Online/index.html')
 
 @app.route('/create_lobby', methods=['POST'])
 def create_lobby():
@@ -34,6 +39,8 @@ def submit_answer():
     lobby_id = data.get('lobby_id')
     member_name = data.get('member_name')
     answer = data.get('answer')
+
+    server.submit_answer(lobby_id, member_name, answer)
 
     if not lobby_id or not member_name or not answer:
         return jsonify({'message': 'Lobby ID, member name, and answer are required'}), 400
@@ -139,4 +146,4 @@ def get_lobby_members():
 
 if __name__ == '__main__':
     app.run(debug=True)
-    print(f"http://127.0.0.1:5000/")
+    print(f"http://127.0.0.1:5500/")
