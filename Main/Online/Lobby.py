@@ -57,6 +57,10 @@ class LobbyServer:
         print(self.gameStarted.get(id))
         return self.gameStarted.get(id)
     
+    def set_round(self, lobby_id, value):
+        self.round[lobby_id] = value
+        return True
+    
     def submit_answer(self, lobby_id, member_name, answer):
         if lobby_id in self.lobbies:
             print(self.lobbies[lobby_id])
@@ -67,16 +71,14 @@ class LobbyServer:
         return False
     
     def all_members_submitted(self, lobby_id):
-        if lobby_id in self.lobbies and lobby_id in self.round:
-            current_round = self.round[lobby_id]
-            for member in self.lobbies[lobby_id]:
-                if len(member.answers) != current_round:
-                    return False
-            return True
-        return False
+        current_round = self.round[lobby_id]
+        for member in self.lobbies[lobby_id]:
+            if len(member.answers) != current_round:
+                return False
+        return True
 
     def leave_lobby(self, lobby_id, member):
-        if lobby_id in self.lobbies and member in self.lobbies[lobby_id]:
+        if not lobby_id > self.lobby_id_counter and not lobby_id < 1 and member in self.lobbies[lobby_id]:
             self.lobbies[lobby_id].remove(member)
             return True
         else:
@@ -96,6 +98,8 @@ def test_create_lobby_and_start_game():
     print(f"Lobby created with ID: {lobby_id}, Code: {lobby_code}")
 
     server.join_lobby_with_code(lobby_code, "A")
+    
+    server.join_lobby_with_code(lobby_code, "B")
 
     game_started = server.start_game(lobby_id)
     assert game_started, "Failed to start the game!"
@@ -104,6 +108,10 @@ def test_create_lobby_and_start_game():
     print(lobby_id)
     assert server.is_game_started(lobby_id), "Game should be started but is not!"
     print("Game start status verified!")
+    
+    server.set_round(lobby_id, 1)
 
     server.submit_answer(lobby_id, "A", "B")
+    
+    print(server.all_members_submitted(lobby_id))
 test_create_lobby_and_start_game()
