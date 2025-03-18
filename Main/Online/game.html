@@ -35,9 +35,16 @@
             cursor: pointer;
             width: 200px;
             height: 100px;
+            
         }
         button:hover {
             background-color: #d1c4e9;
+        }
+        button:disabled,
+            button[disabled]{   
+            border: none;
+            background-color: rgba(255, 255, 255, 0.295);
+            color: white;
         }
     </style>
 </head>

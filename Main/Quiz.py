@@ -130,7 +130,7 @@ def createSurface(surface: str):
             totalTime = round(totalTime)
             surfaceElements = Surface.getEndingElements(totalTime)
             
-            sendEmail()
+            sendEmail(['',''])
             
 def isOnline(isonline):
     global online
@@ -153,6 +153,8 @@ def nextQuestion():
         createSurface("quiz")
         Surface.setSelectedAnswer(answer)
     else:
+        if (online):
+            sendEmails()
         createSurface("ending")
 
 def previousQuestion():
@@ -186,9 +188,15 @@ def preloadAllImages():
 
     images.append(questions)
     images.append(answers)
+#["Bratosz", "Turczewski"]
+def sendEmail(name):
+    Send.send_email(Settings.GetSetting("email-adress"), Time.TimeStamps(), Answers.Answers(), name)
 
-def sendEmail():
-    Send.send_email(Settings.GetSetting("email-adress"), Time.TimeStamps(), Answers.Answers(), ["Bratosz", "Turczewski"])
-
+def sendEmails():
+    response = requests.get(f'https://powarznastrona.pythonanywhere.com/get_lobby_member_objects', params={'lobby_id': lobby_id})
+    if response.status_code == 200:
+        for member in response.members:
+            Send.send_email(Settings.GetSetting("email-adress"), Time.TimeStamps(), member.answers, member.name)
+            
 preloadAllImages()
 main()

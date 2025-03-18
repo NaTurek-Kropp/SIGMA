@@ -89,6 +89,9 @@ class LobbyServer:
 
         return [member.name for member in members]
     
+    def get_lobby_member_objects(self, lobby_id):
+        return self.lobbies.get(lobby_id, [])
+    
 
 def test_create_lobby_and_start_game():
     server = LobbyServer()

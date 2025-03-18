@@ -143,7 +143,19 @@ def get_lobby_members():
         return jsonify({'members': member_names}), 200
     except ValueError:
         return jsonify({'message': 'Invalid lobby ID'}), 400
+@app.route('/get_lobby_member_objects', methods=['GET'])
+def get_lobby_member_objects():
+    lobby_id = request.args.get('lobby_id')
 
+    if not lobby_id:
+        return jsonify({'message': 'Lobby ID is required'}), 400
+
+    try:
+        members = server.get_lobby_member_objects(int(lobby_id))
+        return jsonify({'members': members}), 200
+    except ValueError:
+        return jsonify({'message': 'Invalid lobby ID'}), 400
+    
+    
 if __name__ == '__main__':
     app.run(debug=True)
-    print(f"http://127.0.0.1:5500/")
