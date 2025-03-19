@@ -103,7 +103,7 @@ def getStartingElements(startLocalCommand, startRoomCommand):
     startRoomButton = Elements.Button(color=pygame.Color(0,128,0), text=Elements.Text(text="Start Room", fontSize=80, fontColor="white"), command=startRoomCommand, sizeScale=(.3, .125), positionScale=(0.35, 0.55))
     surfaceElements.append(startRoomButton)
 
-    exitButton = Elements.Button(color=pygame.Color(255,0,0), text=Elements.Text(text="Exit", fontSize=80, fontColor="white"), command=lambda: print("Exit button pressed"), sizeScale=(.3, .125), positionScale=(0.35, 0.7))
+    exitButton = Elements.Button(color=pygame.Color(255,0,0), text=Elements.Text(text="Exit", fontSize=80, fontColor="white"), command=lambda: pygame.quit(), sizeScale=(.3, .125), positionScale=(0.35, 0.7))
     surfaceElements.append(exitButton)
 
     return surfaceElements
