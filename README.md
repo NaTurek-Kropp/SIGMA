@@ -20,8 +20,8 @@ By skorzystać z programu należy zainstalować podane niżej biblioteki:
 -email.mime.text<br>
 -Sub.Time<br>
 -dotenv<br>
-
-By quiz używał właściwych pytań i odpowiedzi należy utworzyć plik pytania.txt w folderze ProjectData w którym pytanie będzie rozpoczynało plik pytania.txt a odpowiedzi będą podawane w następnych liniach pliku(4 odpowiedzi), jeśli chcemy dodać obrazki do pytań i odpowiedzi należy podać link do zdjęcia koło danego pytania lub odpowiedzi po spacji.
+By wysłać na dany email należ go zmienić w plike Settings.config.
+By quiz używał właściwych pytań i odpowiedzi należy utworzyć plik pytania.txt w folderze ProjectData w którym pytanie będzie rozpoczynało plik pytania.txt a odpowiedzi będą podawane w następnych liniach pliku(4 odpowiedzi) musimy dodać obrazek do pytań i/lub odpowiedzi należy podać link do zdjęcia koło danego pytania lub odpowiedzi po spacji.
 Jeśli chcemy włączyć quiz należy uruchomić plik zatytułowany Quiz.py
 
 # Zastosowanie poszczególnych plików
@@ -43,3 +43,4 @@ Projekt jest dostępny na licencji MIT
 Mikołaj Mak<br>
 Bartek Turek<br>
 Dominik Matuszyk<br>
+
