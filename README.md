@@ -1,8 +1,8 @@
 # Program do tworzenia quizu z podanymi informacjami
 
 ## Opis
-Program tworzy quiz na podstawie podanych pytaniami i odpowiedziami.
-Po zatwierdzeniu odpowiedzi wysyła na email użytkownika informacje o poprawnych i niepoprawnych odpowiedziach oraz czas w którym użytkownik rozpoczął i zakończył quiz.
+Program tworzy quiz na podstawie podanych pytaniami z odpowiedziami.
+Po zatwierdzeniu odpowiedzi wysyła na email użytkownika informacje o zaznaczonych odpowiedziach oraz czas w którym użytkownik rozpoczął i zakończył quiz.
 Użytkownik ma do wyboru 4 odpowiedzi na każde pytanie.
 Pytania i odpowiedzi mogą zawierać zdjęcia.
 
@@ -21,7 +21,7 @@ By skorzystać z programu należy zainstalować podane niżej biblioteki:
 -Sub.Time<br>
 -dotenv<br>
 
-By quiz używał właściwych pytań i odpowiedzi należy utworzyć plik pytania.txt w folderze Data w którym pytanie będzie rozpoczynało plik pytania.txt a odpowiedzi będą podawane w następnych liniach pliku(4 odpowiedzi), jeśli chcemy dodać obrazki do pytań i odpowiedzi należy podać link do zdjęcia koło danego pytania lub odpowiedzi po spacji.
+By quiz używał właściwych pytań i odpowiedzi należy utworzyć plik pytania.txt w folderze ProjectData w którym pytanie będzie rozpoczynało plik pytania.txt a odpowiedzi będą podawane w następnych liniach pliku(4 odpowiedzi), jeśli chcemy dodać obrazki do pytań i odpowiedzi należy podać link do zdjęcia koło danego pytania lub odpowiedzi po spacji.
 Jeśli chcemy włączyć quiz należy uruchomić plik zatytułowany Quiz.py
 
 # Zastosowanie poszczególnych plików

@@ -24,6 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const result = await response.json();
 
+
+
             if (response.ok) {
                 alert(result.message);
                 window.location.href = `http://127.0.0.1:5500/Main/Online/lobby.html?lobby_code=${lobbyCode}&member_name=${member_name}`;
