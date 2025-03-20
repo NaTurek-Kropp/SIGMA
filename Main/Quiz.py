@@ -59,6 +59,8 @@ def createSurface(surface: str):
     match surface:
         case "quiz":
             global isInLobby, lobby_id
+            if online:
+                setRound()
             questionImage = [Questions[0][question][0], images[0][question]]
             answerImage = []
             timer = Time.StartTimer()
@@ -150,6 +152,9 @@ def nextQuestion():
         question+=1
         answer = Answers.Answers()[question]
 
+        if online:
+            setRound()
+
         createSurface("quiz")
         Surface.setSelectedAnswer(answer)
     else:
@@ -197,6 +202,10 @@ def sendEmails():
     if response.status_code == 200:
         for member in response.members:
             Send.send_email(Settings.GetSetting("email-adress"), Time.TimeStamps(), member.answers, member.name)
+
+def setRound():
+    data = {'lobby_id': lobby_id}
+    requests.post('https://powarznastrona.pythonanywhere.com/setRound', json=data) #start game
             
 preloadAllImages()
 main()

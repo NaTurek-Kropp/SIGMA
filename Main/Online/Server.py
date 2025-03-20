@@ -70,7 +70,7 @@ def all_members_submitted():
     if not lobby_id:
         return jsonify({'message': 'Lobby ID is required'}), 400
 
-    if server.all_members_submitted(int(lobby_id)):
+    if server.all_members_submitted(lobby_id):
         return jsonify({'all_submitted': True}), 200
     else:
         return jsonify({'all_submitted': False}), 200
@@ -143,6 +143,7 @@ def get_lobby_members():
         return jsonify({'members': member_names}), 200
     except ValueError:
         return jsonify({'message': 'Invalid lobby ID'}), 400
+    
 @app.route('/get_lobby_member_objects', methods=['GET'])
 def get_lobby_member_objects():
     lobby_id = request.args.get('lobby_id')
@@ -156,6 +157,17 @@ def get_lobby_member_objects():
     except ValueError:
         return jsonify({'message': 'Invalid lobby ID'}), 400
     
-    
+@app.route('/set_round', methods=['GET'])
+def set_round():
+    lobby_id = request.args.get('lobby_id')
+    if not lobby_id:
+        return jsonify({'message': 'Lobby ID is required'}), 400
+
+    try:
+        server.set_round(lobby_id)
+        return jsonify({'message': 'Round was set'}), 200
+    except ValueError:
+        return jsonify({'message': 'Invalid lobby ID'}), 400
+
 if __name__ == '__main__':
     app.run(debug=True)
