@@ -1,5 +1,6 @@
-// lobby.js
-const API_URL = "https://powarznastrona.pythonanywhere.com";
+import Config from './Config.js';
+
+const API_URL = Config.getSetting('API_URL');
 
 function getLobbyCodeFromURL() {
     const params = new URLSearchParams(window.location.search);
@@ -8,8 +9,23 @@ function getLobbyCodeFromURL() {
 
 function getMemberNameFromUrl() {
     const params = new URLSearchParams(window.location.search);
-    return params.get('member_name');
+    let memberName = params.get('member_name');
+
+    if (!memberName) {
+        memberName = prompt("Please enter your name:");
+        if (memberName) {
+            // Update the URL without reloading the page
+            params.set('member_name', memberName);
+            window.history.replaceState({}, '', `${window.location.pathname}?${params.toString()}`);
+        } else {
+            alert("You must enter a name to proceed.");
+            return null;
+        }
+    }
+
+    return memberName;
 }
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const lobbyCode = getLobbyCodeFromURL();

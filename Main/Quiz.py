@@ -5,27 +5,23 @@ import Surface
 import Sub.Time as Time
 import Send
 from ProjectData import Settings
-import requests
 import threading
-import time
+import Main.X.Online as Online
 
+global surfaceElements, Questions, Answers, question, answer, images, timer
 surfaceElements = []
-Questions = Data.GetQuestionsDataFixed("ProjectData\pytania.txt")
-Answers = Data.Answers(Data.NumOfQuestions("ProjectData\pytania.txt"))
+Questions = Data.GetQuestionsDataFixed("ProjectData\\pytania.txt")
+Answers = Data.Answers(Data.NumOfQuestions("ProjectData\\pytania.txt"))
 question = 0
 answer = ""
 images = []
 timer = None
-online = False 
-isInLobby = False 
 
 def main():
     pygame.init()
-
     screen = pygame.display.set_mode((1500, 1000))
     clock = pygame.time.Clock()
     running = True
-
     createSurface("starting")
 
     while running:
@@ -34,178 +30,92 @@ def main():
                 running = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mousePos = pygame.mouse.get_pos()
-
                 for button in surfaceElements:
-                    if not isinstance(button, Elements.Button): continue
-                    if button.getRect().collidepoint(mousePos):
+                    if isinstance(button, Elements.Button) and button.getRect().collidepoint(mousePos):
                         button.pressed()
-
+        
         screen.fill("white")
-
         for element in surfaceElements:
             element.tick()
-
         pygame.display.flip()
         clock.tick(60)
 
     pygame.quit()
 
-
-def createSurface(surface: str):
-    global surfaceElements
-    global timer
+def createSurface(surface_name: str):
+    global surfaceElements, timer, question, answer
     surfaceElements.clear()
+
+    if surface_name == "quiz":
+        if Online.online:
+            Online.setRound()
+        
+        questionImage = [Questions[0][question][0], images[0][question]]
+        answerImage = []
+        timer = Time.StartTimer()
+        
+        for indx, ans in enumerate(Questions[1][question]):
+            img = images[1][question][indx] if images[1][question] else None
+            answerImage.append([ans[0], img])
+
+        surfaceElements = Surface.getQuizElements(answerFunc, nextQuestion, previousQuestion, questionImage, answerImage, question == len(Answers.Answers())-1)
+    #    if Online.online:
+    #        Online.start_game_online()
+    #        threading.Thread(target=Online.check_submit_updates, daemon=True).start()
     
-    match surface:
-        case "quiz":
-            global isInLobby, lobby_id
-            if online:
-                setRound()
-            questionImage = [Questions[0][question][0], images[0][question]]
-            answerImage = []
-            timer = Time.StartTimer()
+    #elif surface_name == "lobby":
+    #    Online.create_lobby()
+    #    surfaceElements = Surface.getLobbyElements(Online.lobby_code, [], lambda: createSurface("quiz"), lambda: Online.isOnline(True))
 
-            indx = 0
-            for ans in Questions[1][question]:
-                image = None
-                if images[1][question] != []:
-                    image = images[1][question][indx]
-                answerImage.append([ans[0], image])
-            if (not online):
-                surfaceElements = Surface.getQuizElements(answerFunc, nextQuestion, previousQuestion, questionImage, answerImage, question == len(Answers.Answers())-1)
-            else:
-                isInLobby = False
-                surfaceElements = Surface.getOnlineQuizElements(answerFunc, nextQuestion, previousQuestion, questionImage, answerImage, question == len(Answers.Answers())-1)
-                def start_Game():
-                    data = {'lobby_id': lobby_id}
-                    requests.post('https://powarznastrona.pythonanywhere.com/start_game', json=data) #start game
-                def check_submit_updates():
-                    while True:
-                        response = requests.get('https://powarznastrona.pythonanywhere.com/all_members_submitted', params={'lobby_id': lobby_id})
-                        if response.status_code == 200:
-                            submited = response.json()
-                            print(submited)
-                            if submited.get('all_submitted'):
-                                nextQuestion()
-                        time.sleep(5)
-                start_Game()
-                game_thread = threading.Thread(target=check_submit_updates)
-                game_thread.daemon = True
-                game_thread.start()
-        case "lobby":
-            global lobby_data, lobby_code, lobby_id, lobby_thread
-            isInLobby = True
-            response = requests.post('https://powarznastrona.pythonanywhere.com/create_lobby')
-            if response.status_code == 201:
-                lobby_data = response.json()
-                lobby_id = lobby_data['lobby_id']
-                lobby_code = lobby_data['lobby_code']
-                print(f"Lobby created with ID: {lobby_id} and code: {lobby_code}")
+    #elif surface_name == "update-lobby":
+    #    surfaceElements = Surface.getLobbyElements(Online.lobby_code, Online.get_lobby_members(), lambda: createSurface("quiz"), lambda: Online.isOnline(True))
 
-                def check_lobby_updates():
-                    global lobby_data
-                    while isInLobby:
-                        response = requests.get(f'https://powarznastrona.pythonanywhere.com/get_lobby_members', params={'lobby_id': lobby_id})
-                        if response.status_code == 200:
-                            new_lobby_data = response.json()
-                            if new_lobby_data != lobby_data:
-                                lobby_data = new_lobby_data
-                                createSurface("update-lobby")
-                        time.sleep(5)
+    elif surface_name == "starting":
+        surfaceElements = Surface.getStartingElements(lambda: createSurface("quiz"), lambda: createSurface("lobby"))
 
-                lobby_thread = threading.Thread(target=check_lobby_updates)
-                lobby_thread.daemon = True
-                lobby_thread.start()
-            else:
-                print("Failed to create lobby")
-            surfaceElements = Surface.getLobbyElements(lobby_code, [], lambda: createSurface("quiz"), lambda: isOnline(True))
-        case "update-lobby":
-            data = requests.get(f'https://powarznastrona.pythonanywhere.com/get_lobby_members', params={'lobby_id': lobby_id})
-            members = data.json().get('members', [])
-            surfaceElements = Surface.getLobbyElements(lobby_code, members, lambda: createSurface("quiz"), lambda: isOnline(True))
-        case "starting":
-            surfaceElements = Surface.getStartingElements(lambda: createSurface("quiz"), lambda: createSurface("lobby"))
-        case "ending":
-            totalTime = 0
-            for i in Time.TimeStamps():
-                totalTime += i
-            totalTime = round(totalTime)
-            surfaceElements = Surface.getEndingElements(totalTime)
-            
-            sendEmail(['',''])
-            
-def isOnline(isonline):
-    global online
-    online = isonline
+    elif surface_name == "ending":
+        totalTime = round(sum(Time.TimeStamps()))
+        surfaceElements = Surface.getEndingElements(totalTime)
+        sendEmail(['', ''])
 
 def answerFunc(newAnswer):
     global answer
     answer = newAnswer
 
 def nextQuestion():
-    global question
-    global answer
-
+    global question, answer
     Answers.AppendAnswer(question, answer)
     Time.EndTimer(timer, question)
-    if len(Answers.Answers())-1 > question:
-        question+=1
+    if len(Answers.Answers()) - 1 > question:
+        question += 1
         answer = Answers.Answers()[question]
-
-        if online:
-            setRound()
-
+        if Online.online:
+            Online.setRound()
         createSurface("quiz")
         Surface.setSelectedAnswer(answer)
     else:
-        if (online):
-            sendEmails()
+        if Online.online:
+            Online.sendEmails()
         createSurface("ending")
 
 def previousQuestion():
-    global question
-    global answer
-
-    if question <= 0: return
-
-    Time.EndTimer(timer, question)
-
-    Answers.AppendAnswer(question, answer)
-    question-=1
-    answer = Answers.Answers()[question]
-
-    createSurface("quiz")
-    Surface.setSelectedAnswer(answer)
+    global question, answer
+    if question > 0:
+        Time.EndTimer(timer, question)
+        Answers.AppendAnswer(question, answer)
+        question -= 1
+        answer = Answers.Answers()[question]
+        createSurface("quiz")
+        Surface.setSelectedAnswer(answer)
 
 def preloadAllImages():
-    questions = []
-    for i in Questions[0]:
-        if not i[1]: continue
-        questions.append(Elements.PreloadImage(i[1]))
+    questions_images = [Elements.PreloadImage(q[1]) for q in Questions[0] if q[1]]
+    answers_images = [[Elements.PreloadImage(a[1]) for a in qa if a[1]] for qa in Questions[1]]
+    images.append(questions_images)
+    images.append(answers_images)
 
-    answers = []
-    for qa in Questions[1]:
-        currAnswers = []
-        for i in qa:
-            if not i[1]: continue
-            currAnswers.append(Elements.PreloadImage(i[1]))
-        answers.append(currAnswers)
-
-    images.append(questions)
-    images.append(answers)
-#["Bratosz", "Turczewski"]
 def sendEmail(name):
     Send.send_email(Settings.GetSetting("email-adress"), Time.TimeStamps(), Answers.Answers(), name)
 
-def sendEmails():
-    response = requests.get(f'https://powarznastrona.pythonanywhere.com/get_lobby_member_objects', params={'lobby_id': lobby_id})
-    if response.status_code == 200:
-        for member in response.members:
-            Send.send_email(Settings.GetSetting("email-adress"), Time.TimeStamps(), member.answers, member.name)
-
-def setRound():
-    data = {'lobby_id': lobby_id}
-    requests.post('https://powarznastrona.pythonanywhere.com/setRound', json=data) #start game
-            
 preloadAllImages()
 main()

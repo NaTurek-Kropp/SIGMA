@@ -1,5 +1,7 @@
+import Config from './Config.js';
+
 window.member_name = "";
-const API_URL = "https://powarznastrona.pythonanywhere.com";
+const API_URL = Config.getSetting('API_URL');
 
 async function fetchLobbyId(lobbyCode) {
     const response = await fetch(`${API_URL}/get_lobby_id_from_code?lobby_code=${lobbyCode}`);

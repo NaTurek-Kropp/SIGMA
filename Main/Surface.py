@@ -100,8 +100,8 @@ def getStartingElements(startLocalCommand, startRoomCommand):
     startButton = Elements.Button(color=pygame.Color(0,128,0), text=Elements.Text(text="Start Local", fontSize=80, fontColor="white"), command=startLocalCommand, sizeScale=(.3, .125), positionScale=(0.35, 0.4))
     surfaceElements.append(startButton)
 
-    startRoomButton = Elements.Button(color=pygame.Color(0,128,0), text=Elements.Text(text="Start Room", fontSize=80, fontColor="white"), command=startRoomCommand, sizeScale=(.3, .125), positionScale=(0.35, 0.55))
-    surfaceElements.append(startRoomButton)
+    #startRoomButton = Elements.Button(color=pygame.Color(0,128,0), text=Elements.Text(text="Start Room", fontSize=80, fontColor="white"), command=startRoomCommand, sizeScale=(.3, .125), positionScale=(0.35, 0.55))
+    #surfaceElements.append(startRoomButton)
 
     exitButton = Elements.Button(color=pygame.Color(255,0,0), text=Elements.Text(text="Exit", fontSize=80, fontColor="white"), command=lambda: pygame.quit(), sizeScale=(.3, .125), positionScale=(0.35, 0.7))
     surfaceElements.append(exitButton)
@@ -120,23 +120,23 @@ def getEndingElements(totalTime):
     return surfaceElements
 
 
-def getLobbyElements(code, members, startGameCommand, isOnlineCommand):
-    isOnlineCommand()
-    surfaceElements = []
-    titleTextBox = Elements.TextBox(text=Elements.Text(text="Lobby", fontSize=80, fontColor="white"), backgroundColor="blue", sizeScale=(.5, .2), positionScale=(0, 0.05), align="top", anchor="top")
-    surfaceElements.append(titleTextBox)
+# def getLobbyElements(code, members, startGameCommand, isOnlineCommand):
+#     isOnlineCommand()
+#     surfaceElements = []
+#     titleTextBox = Elements.TextBox(text=Elements.Text(text="Lobby", fontSize=80, fontColor="white"), backgroundColor="blue", sizeScale=(.5, .2), positionScale=(0, 0.05), align="top", anchor="top")
+#     surfaceElements.append(titleTextBox)
     
-    lobbyInfoTextBox = Elements.TextBox(text=Elements.Text(text=f"{code}", fontSize=40, fontColor="white"), backgroundColor="blue", sizeScale=(.8, .1), positionScale=(0, 0.3), align="top", anchor="top")
-    surfaceElements.append(lobbyInfoTextBox)
+#     lobbyInfoTextBox = Elements.TextBox(text=Elements.Text(text=f"{code}", fontSize=40, fontColor="white"), backgroundColor="blue", sizeScale=(.8, .1), positionScale=(0, 0.3), align="top", anchor="top")
+#     surfaceElements.append(lobbyInfoTextBox)
 
-    membersList = members
+#     membersList = members
 
-    y = 0.5
-    for member in membersList:
-        memberTextBox = Elements.TextBox(text=Elements.Text(text=member, fontSize=40, fontColor="yellow"), backgroundColor="green", sizeScale=(.8, .05), positionScale=(0, y), align="top", anchor="top")
-        surfaceElements.append(memberTextBox)
-        y += 0.1
+#     y = 0.5
+#     for member in membersList:
+#         memberTextBox = Elements.TextBox(text=Elements.Text(text=member, fontSize=40, fontColor="yellow"), backgroundColor="green", sizeScale=(.8, .05), positionScale=(0, y), align="top", anchor="top")
+#         surfaceElements.append(memberTextBox)
+#         y += 0.1
 
-        startGameButton = Elements.Button(color=pygame.Color(0,128,0), text=Elements.Text(text="Start Game", fontSize=80, fontColor="white"), command=startGameCommand, sizeScale=(.3, .125), positionScale=(0.35, 0.8))
-        surfaceElements.append(startGameButton)
-    return surfaceElements
+#         startGameButton = Elements.Button(color=pygame.Color(0,128,0), text=Elements.Text(text="Start Game", fontSize=80, fontColor="white"), command=startGameCommand, sizeScale=(.3, .125), positionScale=(0.35, 0.8))
+#         surfaceElements.append(startGameButton)
+#     return surfaceElements
