@@ -10,12 +10,16 @@ def GetSetting(setting):
     config = GetSettings()
     return config[setting]
 
-
 def EditSetting(setting, value):
-    config[setting] = value
+    with open("ProjectData/Settings.config", "r") as f:
+        lines = f.readlines()
     with open("ProjectData/Settings.config", "w") as f:
-        for key, value in config.items():
-            f.write(f"{key}={value}\n")
+        for line in lines:
+            key, _ = line.strip().split("=")
+            if key == setting:
+                f.write(f"{key}={value}\n")
+            else:
+                f.write(line)
 
 
 #print(GetSetting("email-adress"))

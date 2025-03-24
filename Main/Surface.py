@@ -3,6 +3,43 @@ import pygame
 
 buttons = {}
 buttonColor = pygame.Color(0,128,0)
+def getLoginElements(loginCommand):
+    surfaceElements = []
+
+    # Create a title TextBox
+    titleTextBox = Elements.TextBox(
+        text=Elements.Text(text="Wpisz Swoje Imię", fontSize=80, fontColor="white"),
+        backgroundColor="blue",
+        sizeScale=(.6, .15),
+        positionScale=(0, 0.05),
+        align="top",
+        anchor="top"
+    )
+    surfaceElements.append(titleTextBox)
+
+    # Create an InputBox for username
+    usernameInputBox = Elements.InputBox(
+        font=pygame.font.SysFont(None, 50),
+        window=pygame.display.get_surface(),
+        x=pygame.display.get_surface().get_width() // 2 - 250,
+        y=pygame.display.get_surface().get_height() // 2 - 50,
+        width=500,
+        height=60
+    )
+    surfaceElements.append(usernameInputBox)
+
+    # Create a button for the quizCommand
+    quizButton = Elements.Button(
+        color=pygame.Color(0, 128, 0),
+        text=Elements.Text(text="Rozpocznij Quiz", fontSize=50, fontColor="white"),
+        command=lambda: loginCommand(),
+        sizeScale=(.3, .1),
+        positionScale=(0.35, 0.7)
+    )
+    surfaceElements.append(quizButton)
+
+    return surfaceElements
+
 
 def getQuizElements(answerCommand, nextQuestionCommand, prevQuestionCommand, question, answers, isLastQuestion=False):
     ansLetters = ["A", "B", "C", "D"]
@@ -112,9 +149,37 @@ def getStartingElements(startLocalCommand, startRoomCommand):
 def getEndingElements(totalTime):
     surfaceElements = []
 
-    timeTextBox = Elements.TextBox(text=Elements.Text(text=f"Twój czas to: {totalTime} sek!", fontSize=80, fontColor="white"), backgroundColor="black", sizeScale=(.5, .2), positionScale=(0, -0.1), align="center", anchor="center")
+    hours = totalTime // 3600
+    minutes = (totalTime % 3600) // 60
+    seconds = totalTime % 60
+
+    timeText = f"Twój czas to: "
+    if hours > 0:
+        timeText += f"{hours} godz "
+    timeText += f"{minutes} min {seconds} sek!"
+
+    timeTextBox = Elements.TextBox(
+        text=Elements.Text(text=timeText, fontSize=80, fontColor="white"),
+        backgroundColor="black",
+        sizeScale=(.5, .2),
+        positionScale=(0, -0.1),
+        align="center",
+        anchor="center"
+    )
     surfaceElements.append(timeTextBox)
-    infoTextBox = Elements.TextBox(text=Elements.Text(text="Twoje odpowiedzi oraz czas udzielenia został wysłany nauczycielowi", fontSize=40, fontColor="white"), backgroundColor="black", sizeScale=(.8, .1), positionScale=(0, 0.1), align="center", anchor="center")
+
+    infoTextBox = Elements.TextBox(
+        text=Elements.Text(
+            text="Twoje odpowiedzi oraz czas udzielenia został wysłany nauczycielowi",
+            fontSize=40,
+            fontColor="white"
+        ),
+        backgroundColor="black",
+        sizeScale=(.8, .1),
+        positionScale=(0, 0.1),
+        align="center",
+        anchor="center"
+    )
     surfaceElements.append(infoTextBox)
 
     return surfaceElements

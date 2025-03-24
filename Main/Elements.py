@@ -158,6 +158,44 @@ class TextBox():
         self.textRect = self.textrender.get_rect()
         self.textRect.center = getCenter(self.size, self.position)
 
+class InputBox:
+    def __init__(self, font, window, x, y, width, height, active_color=(0, 0, 0), inactive_color=(100, 100, 100)):
+        self.font = font
+        self.window = window
+        self.text = ""
+        self.rect = pygame.Rect(x, y, width, height)
+        self.active_color = active_color
+        self.inactive_color = inactive_color
+        self.color = inactive_color
+        self.active = False
+
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            # Toggle active state based on mouse click position
+            if self.rect.collidepoint(event.pos):
+                self.active = not self.active
+            else:
+                self.active = False
+            self.color = self.active_color if self.active else self.inactive_color
+
+        if self.active and event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RETURN:
+                pass  # Do nothing on Enter
+            elif event.key == pygame.K_BACKSPACE:
+                self.text = self.text[:-1]
+            else:
+                self.text += event.unicode
+
+    def draw(self):
+        # Draw the input box
+        pygame.draw.rect(self.window, self.color, self.rect, 2)
+        # Render the text
+        text_surf = self.font.render(self.text, True, self.color)
+        self.window.blit(text_surf, (self.rect.x + 5, self.rect.y + (self.rect.height - text_surf.get_height()) // 2))
+
+    def getText(self):
+        return self.text
+
 def getSize(surfaceSize, sizeScale, sizeOffset):
     return (surfaceSize[0]*(sizeScale[0])+sizeOffset[0], surfaceSize[1]*(sizeScale[1])+sizeOffset[1])
 
@@ -189,3 +227,5 @@ def getAlignAnchor(surfaceSize, alignAnchor: Literal["topleft", "top", "topright
             return (surfaceSize[0]*.5, surfaceSize[1])
         case "bottomright":
             return (surfaceSize[0], surfaceSize[1])
+
+

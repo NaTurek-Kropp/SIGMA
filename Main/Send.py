@@ -1,14 +1,9 @@
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-import Data
-import random
 import Sub.Time as Time
 from dotenv import load_dotenv
 import os
-import sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../Main")))
-from ProjectData import Settings
 
 load_dotenv() #env var
 
@@ -22,9 +17,19 @@ def send_email(toAdress, time, answers, name):
     msg = MIMEMultipart()
     msg['From'] = fromAdress
     msg['To'] = toAdress
-    msg['Subject'] = f'Wynik Testu {name[0]} {name[1]}'
+    msg['Subject'] = f'Wynik Testu {name}'
 
-    body = f"Time: {time}\nAnswers: {answers}"
+    time_total_seconds = sum(item for item in time)
+    hours, remainder = divmod(time_total_seconds, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    time_total = f"{hours}:{minutes}:{seconds} hh-mm-ss"
+    body = f"Całkowity Czas: {time_total}\n\n"
+    i = 0
+    for el in answers:
+        minutes, seconds = divmod(time[i], 60)
+        body += f"Pytanie {i + 1}: Odp: {el}, Czas: {minutes}:{seconds}\n"
+        i+=1
+
     msg.attach(MIMEText(body, 'plain'))
 
     try:
