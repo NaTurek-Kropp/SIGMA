@@ -76,7 +76,7 @@ def createSurface(surface_name: str):
                 img = images[1][question][indx] if images[1][question] else None
                 answerImage.append([ans[0], img])
 
-            surfaceElements = Surface.getQuizElements(answerFunc, nextQuestion, previousQuestion, questionImage, answerImage, question == len(Answers.Answers())-1)
+            surfaceElements = Surface.getQuizElements(answerFunc, nextQuestion, previousQuestion, questionImage, answerImage, question == len(Answers.Answers())-1, question == 0)
         #    if Online.online:
         #        Online.start_game_online()
         #        threading.Thread(target=Online.check_submit_updates, daemon=True).start()

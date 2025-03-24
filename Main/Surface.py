@@ -41,7 +41,7 @@ def getLoginElements(loginCommand):
     return surfaceElements
 
 
-def getQuizElements(answerCommand, nextQuestionCommand, prevQuestionCommand, question, answers, isLastQuestion=False):
+def getQuizElements(answerCommand, nextQuestionCommand, prevQuestionCommand, question, answers, isLastQuestion=False, isFirstQuestion=True):
     ansLetters = ["A", "B", "C", "D"]
     surfaceElements = []
     buttons.clear()
@@ -80,12 +80,13 @@ def getQuizElements(answerCommand, nextQuestionCommand, prevQuestionCommand, que
     surfaceElements.append(nextQuestionTextBox)
     surfaceElements.append(nextQuestionImage)
 
-    prevQuestionTextBox = Elements.TextBox(text=Elements.Text("Poprzednie", fontSize=40), positionScale=(0.025, 0.4), positionOffset=(-15,0), sizeScale=(.1,.05))
-    prevQuestionImage = Elements.Image(image=Elements.PreloadImage(file="Main\\img\\arrowleft.png"), factor="height", positionScale=(0.025, 0.45), sizeScale=(0,0.075))
-    prevQuestionButton = Elements.Button(command=prevQuestionCommand, positionScale=(0.025,0.4), positionOffset=(-15,0), sizeOffset=(prevQuestionImage.size[0]+prevQuestionTextBox.size[0], prevQuestionImage.size[1]+prevQuestionTextBox.size[1]))
-    surfaceElements.append(prevQuestionButton)
-    surfaceElements.append(prevQuestionTextBox)
-    surfaceElements.append(prevQuestionImage)
+    if not isFirstQuestion:
+        prevQuestionTextBox = Elements.TextBox(text=Elements.Text("Poprzednie", fontSize=40), positionScale=(0.025, 0.4), positionOffset=(-15,0), sizeScale=(.1,.05))
+        prevQuestionImage = Elements.Image(image=Elements.PreloadImage(file="Main\\img\\arrowleft.png"), factor="height", positionScale=(0.025, 0.45), sizeScale=(0,0.075))
+        prevQuestionButton = Elements.Button(command=prevQuestionCommand, positionScale=(0.025,0.4), positionOffset=(-15,0), sizeOffset=(prevQuestionImage.size[0]+prevQuestionTextBox.size[0], prevQuestionImage.size[1]+prevQuestionTextBox.size[1]))
+        surfaceElements.append(prevQuestionButton)
+        surfaceElements.append(prevQuestionImage)
+        surfaceElements.append(prevQuestionTextBox)
 
     return surfaceElements
 
