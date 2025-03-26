@@ -38,6 +38,10 @@ def GetQuestionsDataFixed(file_path):
         ALL.append(answers)
     return questions, ALL
  
+def GetLastLine(file_path):
+    with open(file_path, 'r', encoding='utf-8') as file:
+        lines = file.readlines()
+    return lines[-1].strip() if lines else None
 
 
 file_path = 'ProjectData/pytania.txt'

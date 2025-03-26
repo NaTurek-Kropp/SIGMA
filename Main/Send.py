@@ -4,20 +4,22 @@ from email.mime.text import MIMEText
 import Sub.Time as Time
 from dotenv import load_dotenv
 import os
+from datetime import datetime
 
 load_dotenv() #env var
 
 EMAIL = os.getenv("EMAIL_ACC")
 PASSWORD = os.getenv("EMAIL_PASS")
-
-def send_email(toAdress, time, answers, name):
+def get_current_date():
+    return datetime.now().strftime("%Y-%m-%d")
+def send_email(toAdress, time, answers, name, title, klass):
     fromAdress = EMAIL
     password = PASSWORD
 
     msg = MIMEMultipart()
     msg['From'] = fromAdress
     msg['To'] = toAdress
-    msg['Subject'] = f'Wynik Testu {name}'
+    msg['Subject'] = f'Wynik Testu {klass}:{name}, {name} {get_current_date()}'
 
     time_total_seconds = sum(item for item in time)
     hours, remainder = divmod(time_total_seconds, 3600)

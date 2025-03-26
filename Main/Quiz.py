@@ -24,7 +24,7 @@ def main():
     running = True
     createSurface("starting")
 
-    Settings.EditSetting("user-name", "example name")
+    Settings.EditSubSetting("user-name", "example name")
 
     while running:
         screen.fill("white")  # Clear screen
@@ -51,7 +51,7 @@ def main():
         for element in surfaceElements:
             if hasattr(element, 'draw') and callable(getattr(element, 'draw')):
                 element.draw()  # Draw elements
-                Settings.EditSetting("user-name", element.text) 
+                Settings.EditSubSetting("user-name", element.text) 
         pygame.display.update()  # Only update changed parts
         clock.tick(60)
 
@@ -133,7 +133,7 @@ def preloadAllImages():
     images.append(answers_images)
 
 def sendEmail():
-    Send.send_email(Settings.GetSetting("email-adress"), Time.TimeStamps(), Answers.Answers(), Settings.GetSetting("user-name"))
+    Send.send_email(Settings.GetSetting("email-adress"), Time.TimeStamps(), Answers.Answers(), Settings.GetSubSetting("user-name"), Settings.GetSetting("test-title"), Settings.GetSetting("class"))
 
 preloadAllImages()
 main()
