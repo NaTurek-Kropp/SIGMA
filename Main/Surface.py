@@ -45,7 +45,7 @@ def getQuizElements(answerCommand, nextQuestionCommand, prevQuestionCommand, que
 
     questionTextBox = Elements.TextBox(text=Elements.Text(text=question[0], fontSize=80, fontColor="white"), backgroundColor="blue", sizeScale=(.9, .2), positionScale=(0, 0.05), align="top", anchor="top")
     surfaceElements.append(questionTextBox)
-
+    
     image = Elements.Image(image=question[1], factor="height", sizeScale=(0, 0.3), positionScale=(0, 0.3), align="top", anchor="top")
     surfaceElements.append(image)
 
