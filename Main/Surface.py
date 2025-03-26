@@ -43,7 +43,7 @@ def getQuizElements(answerCommand, nextQuestionCommand, prevQuestionCommand, que
     surfaceElements = []
     buttons.clear()
 
-    questionTextBox = Elements.TextBox(text=Elements.Text(text=question[0], fontSize=80, fontColor="white"), backgroundColor="blue", sizeScale=(.9, .2), positionScale=(0, 0.05), align="top", anchor="top")
+    questionTextBox = Elements.TextBox(text=Elements.Text(text=question[0], fontSize=40, fontColor="white"), backgroundColor="blue", sizeScale=(.9, .2), positionScale=(0, 0.05), align="top", anchor="top")
     surfaceElements.append(questionTextBox)
     
     image = Elements.Image(image=question[1], factor="height", sizeScale=(0, 0.3), positionScale=(0, 0.3), align="top", anchor="top")
@@ -54,7 +54,7 @@ def getQuizElements(answerCommand, nextQuestionCommand, prevQuestionCommand, que
         if i == 2:
             y+=.15
         
-        answerButton = Elements.Button(color=pygame.Color(0,128,0), text=Elements.Text(text=answers[i][0], fontSize=80, fontColor="white"), command=lambda ans=ansLetters[i]: answerQuestion(ans, answerCommand), sizeScale=(.4, .125), positionScale=(0.075+i%2*0.5,y))
+        answerButton = Elements.Button(color=pygame.Color(0,128,0), text=Elements.Text(text=answers[i][0], fontSize=40, fontColor="white"), command=lambda ans=ansLetters[i]: answerQuestion(ans, answerCommand), sizeScale=(.4, .125), positionScale=(0.075+i%2*0.5,y))
         buttons[ansLetters[i]] = answerButton
 
         if answers[i][1]:
