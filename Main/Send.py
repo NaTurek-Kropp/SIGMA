@@ -19,7 +19,7 @@ def send_email(toAdress, time, answers, name, title, klass):
     msg = MIMEMultipart()
     msg['From'] = fromAdress
     msg['To'] = toAdress
-    msg['Subject'] = f'Wynik Testu {klass}:{name}, {name} {get_current_date()}'
+    msg['Subject'] = f'Wynik Testu {klass}:{title}, {name} {get_current_date()}'
 
     time_total_seconds = sum(item for item in time)
     hours, remainder = divmod(time_total_seconds, 3600)
