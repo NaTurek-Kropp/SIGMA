@@ -7,17 +7,22 @@ import Send
 from ProjectData import Settings
 import threading
 import Main.X.Online as Online
+import subprocess
 
-global surfaceElements, Questions, Answers, question, answer, images, timer
+global surfaceElements, Questions, Answers, question, answer, images, timer, surfaceId, key
 surfaceElements = []
-Questions = Data.GetQuestionsDataFixed("ProjectData\\pytania.txt")
-Answers = Data.Answers(Data.NumOfQuestions("ProjectData\\pytania.txt"))
+surfaceId = 0
+Questions = None
+Answers = None
 question = 0
 answer = ""
 images = []
 timer = None
+key = ""
 
 def main():
+    global key
+    subprocess.run(["python3", "Main/MAILtestexctractor.py"], shell=True)
     pygame.init()
     screen = pygame.display.set_mode((1500, 1000))
     clock = pygame.time.Clock()
@@ -50,21 +55,31 @@ def main():
 
         for element in surfaceElements:
             if hasattr(element, 'draw') and callable(getattr(element, 'draw')):
-                element.draw()  # Draw elements
-                Settings.EditSubSetting("user-name", element.text) 
+                if surfaceId == 1 and isinstance(element, Elements.InputBox):
+                    element.draw()  # Draw elements
+                    Settings.EditSubSetting("user-name", element.text) 
+                if surfaceId == 0 and isinstance(element, Elements.InputBox):
+                    element.draw()
+                    key = element.text
+                    
         pygame.display.update()  # Only update changed parts
         clock.tick(60)
 
     pygame.quit()
 
 def createSurface(surface_name: str):
-    global surfaceElements, timer, question, answer
+    global surfaceElements, timer, question, answer, surfaceId, key
     surfaceElements.clear()
 
     match surface_name:
+        case "starting":
+            surfaceId = 0
+            surfaceElements = Surface.getStartingElements(lambda: getTest(key), lambda: createSurface("lobby"))
         case "login":
+            surfaceId = 1
             surfaceElements = Surface.getLoginElements(lambda: createSurface("quiz"))
         case "quiz":
+            surfaceId = 2
             # if Online.online:
             #     Online.setRound()
             
@@ -87,14 +102,20 @@ def createSurface(surface_name: str):
 
         # case "update-lobby":
         #     surfaceElements = Surface.getLobbyElements(Online.lobby_code, Online.get_lobby_members(), lambda: createSurface("quiz"), lambda: Online.isOnline(True))
-
-        case "starting":
-            surfaceElements = Surface.getStartingElements(lambda: createSurface("login"), lambda: createSurface("lobby"))
-
         case "ending":
+            surfaceId = 3
             threading.Thread(target=sendEmail, daemon=True).start()
             totalTime = round(sum(Time.TimeStamps()))
             surfaceElements = Surface.getEndingElements(totalTime)
+
+from Main import MAILtestexctractor as ms
+def getTest(keycode):
+    global Questions
+    global Answers
+    Questions = ms.get_test_by_keycode(keycode)
+    Answers = ms.NumOfQuestionsFromKeycode(keycode)
+    preloadAllImages()
+    createSurface("login")
 
 def answerFunc(newAnswer):
     global answer
@@ -135,5 +156,4 @@ def preloadAllImages():
 def sendEmail():
     Send.send_email(Settings.GetSetting("email-adress"), Time.TimeStamps(), Answers.Answers(), Settings.GetSubSetting("user-name"), Settings.GetSetting("test-title"), Settings.GetSetting("class"))
 
-preloadAllImages()
 main()

@@ -132,11 +132,24 @@ def setSelectedAnswer(answer):
 def getStartingElements(startLocalCommand, startRoomCommand):
     surfaceElements = []
 
-    startButton = Elements.Button(color=pygame.Color(0,128,0), text=Elements.Text(text="Rozpocznij Quiz", fontSize=80, fontColor="white"), command=startLocalCommand, sizeScale=(.3, .125), positionScale=(0.35, 0.4))
-    surfaceElements.append(startButton)
+    codeInputBox = Elements.InputBox(
+        font=pygame.font.SysFont(None, 50),
+        window=pygame.display.get_surface(),
+        x=pygame.display.get_surface().get_width() // 2 - 250,
+        y=pygame.display.get_surface().get_height() // 2 + 50,
+        width=500,
+        height=60
+    )
+    surfaceElements.append(codeInputBox)
 
-    #startRoomButton = Elements.Button(color=pygame.Color(0,128,0), text=Elements.Text(text="Start Room", fontSize=80, fontColor="white"), command=startRoomCommand, sizeScale=(.3, .125), positionScale=(0.35, 0.55))
-    #surfaceElements.append(startRoomButton)
+    startButton = Elements.Button(
+        color=pygame.Color(0, 128, 0),
+        text=Elements.Text(text="Rozpocznij Quiz", fontSize=80, fontColor="white"),
+        command=lambda: startLocalCommand() if codeInputBox.text.strip() else None,
+        sizeScale=(.3, .125),
+        positionScale=(0.35, 0.4)
+    )
+    surfaceElements.append(startButton)
 
     exitButton = Elements.Button(color=pygame.Color(255,0,0), text=Elements.Text(text="Wyjdź", fontSize=80, fontColor="white"), command=lambda: pygame.quit(), sizeScale=(.3, .125), positionScale=(0.35, 0.7))
     surfaceElements.append(exitButton)
