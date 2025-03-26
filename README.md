@@ -1,7 +1,7 @@
 # Program do tworzenia quizu z podanymi informacjami
 
 ## Opis
-Program tworzy quiz na podstawie podanych pytaniami z odpowiedziami.
+Program tworzy quiz na podstawie podanych pytaniach z odpowiedziach.
 Po zatwierdzeniu odpowiedzi wysyła na email użytkownika informacje o zaznaczonych odpowiedziach oraz czas w którym użytkownik rozpoczął i zakończył quiz.
 Użytkownik ma do wyboru 4 odpowiedzi na każde pytanie.
 Pytania i odpowiedzi mogą zawierać zdjęcia.
