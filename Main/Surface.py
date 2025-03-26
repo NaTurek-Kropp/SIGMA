@@ -6,7 +6,6 @@ buttonColor = pygame.Color(0,128,0)
 def getLoginElements(loginCommand):
     surfaceElements = []
 
-    # Create a title TextBox
     titleTextBox = Elements.TextBox(
         text=Elements.Text(text="Wpisz Swoje Imię", fontSize=80, fontColor="white"),
         backgroundColor="blue",
@@ -17,7 +16,6 @@ def getLoginElements(loginCommand):
     )
     surfaceElements.append(titleTextBox)
 
-    # Create an InputBox for username
     usernameInputBox = Elements.InputBox(
         font=pygame.font.SysFont(None, 50),
         window=pygame.display.get_surface(),
@@ -27,16 +25,15 @@ def getLoginElements(loginCommand):
         height=60
     )
     surfaceElements.append(usernameInputBox)
-
-    # Create a button for the quizCommand
     quizButton = Elements.Button(
-        color=pygame.Color(0, 128, 0),
+        color=pygame.Color(0, 128, 0),  
         text=Elements.Text(text="Rozpocznij Quiz", fontSize=50, fontColor="white"),
-        command=lambda: loginCommand(),
+        command=lambda: loginCommand() if usernameInputBox.text.strip() else None,
         sizeScale=(.3, .1),
         positionScale=(0.35, 0.7)
     )
     surfaceElements.append(quizButton)
+
 
     return surfaceElements
 
@@ -90,36 +87,36 @@ def getQuizElements(answerCommand, nextQuestionCommand, prevQuestionCommand, que
 
     return surfaceElements
 
-def getOnlineQuizElements(answerCommand, nextQuestionCommand, prevQuestionCommand, question, answers, isLastQuestion=False):
-    ansLetters = ["A", "B", "C", "D"]
-    surfaceElements = []
-    buttons.clear()
+# def getOnlineQuizElements(answerCommand, nextQuestionCommand, prevQuestionCommand, question, answers, isLastQuestion=False):
+#     ansLetters = ["A", "B", "C", "D"]
+#     surfaceElements = []
+#     buttons.clear()
 
-    questionTextBox = Elements.TextBox(text=Elements.Text(text=question[0], fontSize=80, fontColor="white"), backgroundColor="blue", sizeScale=(.9, .2), positionScale=(0, 0.05), align="top", anchor="top")
-    surfaceElements.append(questionTextBox)
+#     questionTextBox = Elements.TextBox(text=Elements.Text(text=question[0], fontSize=80, fontColor="white"), backgroundColor="blue", sizeScale=(.9, .2), positionScale=(0, 0.05), align="top", anchor="top")
+#     surfaceElements.append(questionTextBox)
 
-    image = Elements.Image(image=question[1], factor="height", sizeScale=(0, 0.3), positionScale=(0, 0.3), align="top", anchor="top")
-    surfaceElements.append(image)
+#     image = Elements.Image(image=question[1], factor="height", sizeScale=(0, 0.3), positionScale=(0, 0.3), align="top", anchor="top")
+#     surfaceElements.append(image)
 
-    y = 0.65
-    for i in range(4):
-        if i == 2:
-            y+=.15
+#     y = 0.65
+#     for i in range(4):
+#         if i == 2:
+#             y+=.15
         
-        answerButton = Elements.TextBox(backgroundColor=pygame.Color(0,128,0), text=Elements.Text(text=answers[i][0], fontSize=80, fontColor="white"), sizeScale=(.4, .125), positionScale=(0.075+i%2*0.5,y))
-        buttons[ansLetters[i]] = answerButton
+#         answerButton = Elements.TextBox(backgroundColor=pygame.Color(0,128,0), text=Elements.Text(text=answers[i][0], fontSize=80, fontColor="white"), sizeScale=(.4, .125), positionScale=(0.075+i%2*0.5,y))
+#         buttons[ansLetters[i]] = answerButton
 
-        if answers[i][1]:
-            ansImage = Elements.Image(image=answers[i][1], positionScale=(0.075+i%2*0.5+0.4,y), sizeScale=(0, .125), factor="height", anchor="topright")
-            answerButton.size = (answerButton.size[0]-ansImage.size[0], answerButton.size[1])
-            answerButton.renderText()
-            surfaceElements.append(ansImage)
+#         if answers[i][1]:
+#             ansImage = Elements.Image(image=answers[i][1], positionScale=(0.075+i%2*0.5+0.4,y), sizeScale=(0, .125), factor="height", anchor="topright")
+#             answerButton.size = (answerButton.size[0]-ansImage.size[0], answerButton.size[1])
+#             answerButton.renderText()
+#             surfaceElements.append(ansImage)
 
-        ansLetter = Elements.TextBox(text=Elements.Text(text=ansLetters[i], fontSize=80, fontColor="white"), backgroundColor="gray", sizeScale=(.05, .125), positionScale=(0.025+i%2*0.5, y))
-        surfaceElements.append(answerButton)
-        surfaceElements.append(ansLetter)
+#         ansLetter = Elements.TextBox(text=Elements.Text(text=ansLetters[i], fontSize=80, fontColor="white"), backgroundColor="gray", sizeScale=(.05, .125), positionScale=(0.025+i%2*0.5, y))
+#         surfaceElements.append(answerButton)
+#         surfaceElements.append(ansLetter)
         
-        return surfaceElements
+#         return surfaceElements
 
 
 def answerQuestion(answer, answerCommand):
@@ -135,13 +132,13 @@ def setSelectedAnswer(answer):
 def getStartingElements(startLocalCommand, startRoomCommand):
     surfaceElements = []
 
-    startButton = Elements.Button(color=pygame.Color(0,128,0), text=Elements.Text(text="Start Local", fontSize=80, fontColor="white"), command=startLocalCommand, sizeScale=(.3, .125), positionScale=(0.35, 0.4))
+    startButton = Elements.Button(color=pygame.Color(0,128,0), text=Elements.Text(text="Rozpocznij Quiz", fontSize=80, fontColor="white"), command=startLocalCommand, sizeScale=(.3, .125), positionScale=(0.35, 0.4))
     surfaceElements.append(startButton)
 
     #startRoomButton = Elements.Button(color=pygame.Color(0,128,0), text=Elements.Text(text="Start Room", fontSize=80, fontColor="white"), command=startRoomCommand, sizeScale=(.3, .125), positionScale=(0.35, 0.55))
     #surfaceElements.append(startRoomButton)
 
-    exitButton = Elements.Button(color=pygame.Color(255,0,0), text=Elements.Text(text="Exit", fontSize=80, fontColor="white"), command=lambda: pygame.quit(), sizeScale=(.3, .125), positionScale=(0.35, 0.7))
+    exitButton = Elements.Button(color=pygame.Color(255,0,0), text=Elements.Text(text="Wyjdź", fontSize=80, fontColor="white"), command=lambda: pygame.quit(), sizeScale=(.3, .125), positionScale=(0.35, 0.7))
     surfaceElements.append(exitButton)
 
     return surfaceElements

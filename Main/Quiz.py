@@ -38,11 +38,11 @@ def main():
                     if isinstance(element, Elements.Button) and element.getRect().collidepoint(mousePos):
                         element.pressed()
                     elif isinstance(element, Elements.InputBox):
-                        element.handle_event(event)  # Handle input clicks
+                        element.handle_event(event) 
             elif event.type == pygame.KEYDOWN:
                 for element in surfaceElements:
                     if isinstance(element, Elements.InputBox):
-                        element.handle_event(event)  # Handle text input
+                        element.handle_event(event) 
 
         for element in surfaceElements:
             if hasattr(element, 'tick') and callable(getattr(element, 'tick')):
@@ -92,9 +92,9 @@ def createSurface(surface_name: str):
             surfaceElements = Surface.getStartingElements(lambda: createSurface("login"), lambda: createSurface("lobby"))
 
         case "ending":
+            threading.Thread(target=sendEmail, daemon=True).start()
             totalTime = round(sum(Time.TimeStamps()))
             surfaceElements = Surface.getEndingElements(totalTime)
-            sendEmail()
 
 def answerFunc(newAnswer):
     global answer
@@ -112,8 +112,8 @@ def nextQuestion():
         createSurface("quiz")
         Surface.setSelectedAnswer(answer)
     else:
-        if Online.online:
-            Online.sendEmails()
+        # if Online.online:
+        #     Online.sendEmails()
         createSurface("ending")
 
 def previousQuestion():

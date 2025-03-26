@@ -27,27 +27,26 @@ class Text():
 
     def render(self):
         return self.font.render(self.text, True, self.fontColor, self.backgroundColor)
-
 class PreloadImage():
     def __init__(self, url=None, file=None):
         self.image = None
         self.url = url
         self.file = file
-
         self.loadImage()
 
     def loadImage(self):
         if self.url:
-            attempts = 0
-            while not self.image or attempts == 5:
-                attempts+=1
-                try:
-                    response = requests.get(self.url)
-                    self.image = pygame.image.load(BytesIO(response.content))
-                except requests.ConnectionError:
-                    print("Nie udało się pobrać obrazu")
-        else:
-            self.image = pygame.image.load(self.file)
+            try:
+                response = requests.get(self.url, timeout=5)
+                response.raise_for_status()
+                self.image = pygame.image.load(BytesIO(response.content))
+            except (requests.RequestException, pygame.error) as e:
+                print(f"Nie udało sie wczytać obrazu z linku: {e}")
+        elif self.file:
+            try:
+                self.image = pygame.image.load(self.file)
+            except pygame.error as e:
+                print(f"Nie udało sie wczytać obrazu z pliku: {e}")
 
     def getImage(self):
         return self.image
