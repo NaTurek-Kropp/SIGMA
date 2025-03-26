@@ -1,0 +1,177 @@
+<!DOCTYPE>: Jaki jest cel tego znacznika?
+A) Definiuje typ dokumentu.
+B) Określa język dokumentu.
+C) Ustawia kodowanie znaków.
+D) Definiuje nagłówek strony.
+<html>: Co reprezentuje ten znacznik?
+A) Nagłówek dokumentu.
+B) Ciało dokumentu.
+C) Cały dokument HTML.
+D) Stopkę dokumentu.
+<title>: Jaki jest efekt użycia tego znacznika?
+A) Ustawia tytuł dokumentu.
+B) Definiuje nagłówek strony.
+C) Dodaje opis dokumentu.
+D) Ustawia kodowanie znaków.
+<body>: Co definiuje ten znacznik?
+A) Nagłówek dokumentu.
+B) Ciało dokumentu.
+C) Stopkę dokumentu.
+D) Kontener sekcji.
+<h1> do <h6>: Jakie są te znaczniki?
+A) Definiują paragrafy.
+B) Są nagłówkami HTML.
+C) Są linkami.
+D) Są tabelami.
+<p>: Co reprezentuje ten znacznik?
+A) Przejście do nowej linii.
+B) Paragraf.
+C) Nagłówek.
+D) Komentarz.
+ <!–…–> Jaki jest efekt użycia tego znacznika?
+A) Przejście do nowej linii.
+B) Linia pozioma.
+C) Komentarz.
+D) Nagłówek.
+<hr>: Co reprezentuje ten znacznik?
+A) Przejście do nowej linii.
+B) Linia pozioma.
+C) Komentarz.
+D) Paragraf.
+<!–…–>: Jaki jest cel tego znacznika?
+A) Definiuje nagłówek.
+B) Jest komentarzem.
+C) Ustawia tytuł.
+D) Ustawia kodowanie.
+<abbr>: Co reprezentuje ten znacznik?
+A) Akronim.
+B) Nagłówek.
+C) Paragraf.
+D) Tabela.
+<b>: Jaki jest efekt użycia tego znacznika?
+A) Pogrubienie tekstu.
+B) Pochylenie tekstu.
+C) Podkreślenie tekstu.
+D) Przejście do nowej linii.
+<em>: Co robi ten znacznik?
+A) Uwypukla tekst.
+B) Pogrubia tekst.
+C) Pochyla tekst.
+D) Podkreśla tekst.
+<i>: Jaki jest efekt użycia tego znacznika?
+A) Pochyla tekst.
+B) Pogrubia tekst.
+C) Podkreśla tekst.
+D) Uwypukla tekst.
+<small>: Co robi ten znacznik?
+A) Pomniejsza tekst.
+B) Pogrubia tekst.
+C) Pochyla tekst.
+D) Uwypukla tekst.
+<strong>: Jaki jest efekt użycia tego znacznika?
+A) Ważny tekst.
+B) Pogrubiony tekst.
+C) Podkreślony tekst.
+D) Pochylony tekst.
+<form>: Co reprezentuje ten znacznik?
+A) Ramy formularza.
+B) Pole input.
+C) Przycisk.
+D) Tabela.
+<input>: Jaki jest efekt użycia tego znacznika?
+A) Wejście.
+B) Przycisk.
+C) Lista rozwijana.
+D) Nagłówek.
+<textarea>: Co reprezentuje ten znacznik?
+A) Wieloliniowe wejście tekstowe.
+B) Pole input.
+C) Przycisk.
+D) Tabela.
+<button>: Jaki jest efekt użycia tego znacznika?
+A) Przycisk.
+B) Pole input.
+C) Lista rozwijana.
+D) Nagłówek.
+<select>: Co reprezentuje ten znacznik?
+A) Lista rozwijana.
+B) Pole input.
+C) Przycisk.
+D) Tabela.
+Część 4: Ramki, Obrazki, Audio/Wideo
+<iframe>: Co reprezentuje ten znacznik?
+A) Ramka wewnętrzna.
+B) Obrazek.
+C) Film.
+D) Nagłówek.
+<img>: Jaki jest efekt użycia tego znacznika?
+A) Obrazek.
+B) Film.
+C) Ramka wewnętrzna.
+D) Dźwięk.
+<audio>: Co reprezentuje ten znacznik?
+A) Dźwięk.
+B) Film.
+C) Obrazek.
+D) Ramka wewnętrzna.
+<video>: Jaki jest efekt użycia tego znacznika?
+A) Film.
+B) Dźwięk.
+C) Obrazek.
+D) Nagłówek.
+<a>: Co reprezentuje ten znacznik?
+A) Odnośnik.
+B) Nagłówek.
+C) Paragraf.
+D) Tabela.
+<ul>: Jaki jest efekt użycia tego znacznika?
+A) Lista uporządkowana.
+B) Lista nieuporządkowana.
+C) Tabela.
+D) Nagłówek.
+<ol>: Co reprezentuje ten znacznik?
+A) Lista uporządkowana.
+B) Lista nieuporządkowana.
+C) Tabela.
+D) Paragraf.
+<table>: Jaki jest efekt użycia tego znacznika?
+A) Tabela.
+B) Lista.
+C) Nagłówek.
+D) Paragraf.
+<th>: Co reprezentuje ten znacznik?
+A) Pole nagłówkowe tabeli.
+B) Komórka tabeli.
+C) Wiersz tabeli.
+D) Stopka tabeli.
+<td>: Jaki jest efekt użycia tego znacznika?
+A) Komórka tabeli.
+B) Pole nagłówkowe tabeli.
+C) Wiersz tabeli.
+D) Nagłówek tabeli.
+<style>: Co reprezentuje ten znacznik?
+A) Informacja o stylu dokumentu.
+B) Kontener sekcji.
+C) Nagłówek dokumentu.
+D) Stopka dokumentu.
+<div>: Jaki jest efekt użycia tego znacznika?
+A) Kontener sekcji.
+B) Nagłówek dokumentu.
+C) Stopka dokumentu.
+D) Paragraf.
+<meta>: Co reprezentuje ten znacznik?
+A) Metadane dokumentu.
+B) Nagłówek dokumentu.
+C) Kontener sekcji.
+D) Stopka dokumentu.
+<script>: Jaki jest efekt użycia tego znacznika?
+A) Ramy skryptu.
+B) Kontener sekcji.
+C) Nagłówek dokumentu.
+D) Stopka dokumentu.
+<embed>: Co reprezentuje ten znacznik?
+A) Kontener na zewnętrzny element wbudowany.
+B) Ramy skryptu.
+C) Kontener sekcji.
+D) Nagłówek dokumentu.
+
