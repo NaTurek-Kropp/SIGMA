@@ -20,7 +20,7 @@ By skorzystać z programu należy zainstalować podane niżej biblioteki:
 -email.mime.text<br>
 -Sub.Time<br>
 -dotenv<br>
-Aby wysłać odpowiedzi na wskazany e-mail, należy zmienić go w pliku Settings.config.
+Aby wysłać odpowiedzi na wskazany e-mail, i prawidłową klase i nazwe testu należy zmienić to w pliku Settings.config.
 Aby quiz używał właściwych pytań i odpowiedzi, należy utworzyć plik pytania.txt w folderze ProjectData, w którym pytanie będzie rozpoczynało plik, a odpowiedzi będą podawane w następnych liniach (4 odpowiedzi). Jeśli chcemy dodać obrazek do pytań lub odpowiedzi, należy podać link do zdjęcia obok danego pytania lub odpowiedzi, po spacji.
 Aby uruchomić quiz, należy włączyć plik zatytułowany Quiz.py.
 
