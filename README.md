@@ -38,24 +38,27 @@ w pliku Settings.config można ustawić limit czasowy<br>
 # Licencja
 Projekt jest dostępny na licencji MIT
 
+# Testy
+1. System zostaje odpalony<br>
+2. Aktor przechodzi na stronę wpisywania imienia<br>
+3. System prezentuje pole na wpisanie imienia<br>
+4. Aktor wypełnia pole i przechodzi dalej<br>
+5. System prezentuje pytania i odpowiedzi<br>
+6. Aktor zaznacza odpowiedzi i przechodzi dalej<br>
+7. System prezentuje czas w którym użytkownik zakończył quiz<br>
+8. System wysyła odpowiedzi na email użytkownika<br>
+
+# Wyjątki
+4a Aktor nie wypełnia pola i przechodzi dalej<br>
+4a2 System nie prezentuje pytania i odpowiedzi<br>
+
+6a Aktor nie zaznacza odpowiedzi i przechodzi dalej<br>
+6a2 System zaznacza odpowiedź jako None<br>
 
 # Autorzy
 Mikołaj Mak<br>
+Wkład 37.5%<br>
 Bartek Turek<br>
+Wkład 42.5%<br>
 Dominik Matuszyk<br>
-
-# Testy
-1. Aktor przechodzi na stronę wpisywania imienia<br>
-2. System prezentuje pole na wpisanie imienia<br>
-3. Aktor wypełnia pole i przechodzi dalej<br>
-4. System prezentuje pytania i odpowiedzi<br>
-5. Aktor zaznacza odpowiedzi i przechodzi dalej<br>
-6. System prezentuje czas w którym użytkownik zakończył quiz<br>
-7. System wysyła odpowiedzi na email użytkownika<br>
-
-# Wyjątki
-3a Aktor nie wypełnia pola i przechodzi dalej<br>
-3a2 System nie prezentuje pytania i odpowiedzi<br>
-
-5a Aktor nie zaznacza odpowiedzi i przechodzi dalej<br>
-5a2 System zaznacza odpowiedź jako None<br>
+Wkład 20%<br>
